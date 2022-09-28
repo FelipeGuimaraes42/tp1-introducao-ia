@@ -3,7 +3,6 @@
 
 int main() {
     BFS bfs;
-    bfs.node = 2;
-    std::cout << bfs.node << std::endl;
+    std::cout << "Hello, World." << std::endl;
     return 0;
 }
