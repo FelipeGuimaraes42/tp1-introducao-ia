@@ -2,7 +2,7 @@
 #include <string>
 #include <vector>
 #include "BFS.cpp"
-#include "InputFile.cpp"
+#include "include/InputFile.hpp"
 
 using namespace std;
 
