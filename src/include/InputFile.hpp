@@ -8,19 +8,12 @@ using namespace std;
 class InputFile
 {
 private:
-    // Attributes
     string fileName;
-
-    // Private Method
     void printVector(const vector<string> map);
+    vector<vector<float>> convertSymbolsToWeight(const int numLines, const int numColumns, const vector<string> symbolMap);
 
 public:
-    // Constructor
     InputFile(string fileName);
-
-    // Destructor
     ~InputFile();
-
-    // Methods
     vector<string> getFileContent();
 };
