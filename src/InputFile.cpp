@@ -48,6 +48,28 @@ vector<vector<float>> InputFile::convertSymbolsToWeight(const int numLines, cons
     return pesos;
 }
 
+void InputFile::readLines(vector<string> &lines, int &numLines, int &numColumns)
+{
+    ifstream file;
+    file.open(this->fileName);
+    string line;
+    string stringColumns;
+    file >> stringColumns;
+    string stringLines;
+    file >> stringLines;
+
+    while (getline(file, line))
+    {
+        lines.push_back(line);
+    }
+    lines.erase(lines.begin());
+
+    numLines = stoi(stringLines);
+    numColumns = stoi(stringColumns);
+
+    // printVector(lines);
+}
+
 InputFile::InputFile(string fileName)
 {
     this->fileName = fileName;
@@ -57,26 +79,12 @@ InputFile::~InputFile() {}
 
 vector<string> InputFile::getFileContent()
 {
-    ifstream file;
-    file.open(this->fileName);
     vector<string> lines;
-    string line;
-    string stringColumns;
-    file >> stringColumns;
-    string stringLines;
-    file >> stringLines;
+    int numLines, numColumns;
 
-    int numLines = stoi(stringLines);
-    int numColumns = stoi(stringColumns);
-
-    while (getline(file, line))
-    {
-        lines.push_back(line);
-    }
-    lines.erase(lines.begin());
+    readLines(lines, numLines, numColumns);
 
     vector<vector<float>> pesos = convertSymbolsToWeight(numLines, numColumns, lines);
 
-    // printVector(lines);
     return lines;
 }
