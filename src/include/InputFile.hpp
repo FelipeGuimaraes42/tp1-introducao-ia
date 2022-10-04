@@ -3,6 +3,8 @@
 #include <iostream>
 #include <vector>
 
+#define INF 0x3f3f3f3f
+
 using namespace std;
 
 class InputFile

@@ -32,7 +32,7 @@ vector<vector<float>> InputFile::convertSymbolsToWeight(const int numLines, cons
                 break;
 
             default:
-                line.push_back(100000.0);
+                line.push_back(INF);
                 break;
             }
         }
@@ -42,8 +42,9 @@ vector<vector<float>> InputFile::convertSymbolsToWeight(const int numLines, cons
     {
         for (int j = 0; j < numColumns; j++)
         {
-            cout << pesos.at(i).at(j) << " ";
+            cout << pesos.at(i).at(j) << "\t";
         }
+        cout << endl;
     }
     return pesos;
 }
