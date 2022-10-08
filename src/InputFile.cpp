@@ -1,10 +1,14 @@
 #include "include/InputFile.hpp"
 
-void InputFile::printVector(const vector<string> map)
+void InputFile::printMap(const vector<vector<float>> pesos, int numLines, int numColumns)
 {
-    for (int i = 0; i < map.size(); i++)
+    for (int i = 0; i < numLines; i++)
     {
-        cout << map[i] << endl;
+        for (int j = 0; j < numColumns; j++)
+        {
+            cout << pesos.at(i).at(j) << "\t";
+        }
+        cout << endl;
     }
 }
 
@@ -38,14 +42,7 @@ vector<vector<float>> InputFile::convertSymbolsToWeight(const int numLines, cons
         }
         pesos.push_back(line);
     }
-    for (int i = 0; i < numLines; i++)
-    {
-        for (int j = 0; j < numColumns; j++)
-        {
-            cout << pesos.at(i).at(j) << "\t";
-        }
-        cout << endl;
-    }
+    // printMap(pesos, numLines, numColumns);
     return pesos;
 }
 
@@ -78,14 +75,11 @@ InputFile::InputFile(string fileName)
 
 InputFile::~InputFile() {}
 
-vector<string> InputFile::getFileContent()
+vector<vector<float>> InputFile::getFileContent(int &numLines, int &numColumns)
 {
     vector<string> lines;
-    int numLines, numColumns;
 
     readLines(lines, numLines, numColumns);
 
-    vector<vector<float>> pesos = convertSymbolsToWeight(numLines, numColumns, lines);
-
-    return lines;
+    return convertSymbolsToWeight(numLines, numColumns, lines);
 }

@@ -1,13 +1,16 @@
-#include <vector>
 #include <iostream>
+#include <list>
 
 using namespace std;
 
 class Graph
 {
 private:
-    int vertices;
+    int verticeNumber;
+    list<int> *adj;
+
 public:
-    Graph(/* args */);
+    Graph(int V);
     ~Graph();
+    void addEdge(int v1, int v2);
 };

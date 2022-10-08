@@ -12,11 +12,11 @@ class InputFile
 private:
     string fileName;
     void readLines(vector<string> &lines, int &numLines, int &numColumns);
-    void printVector(const vector<string> map);
+    void printMap(const vector<vector<float>> pesos, int numLines, int numColumns);
     vector<vector<float>> convertSymbolsToWeight(const int numLines, const int numColumns, const vector<string> symbolMap);
 
 public:
     InputFile(string fileName);
     ~InputFile();
-    vector<string> getFileContent();
+    vector<vector<float>> getFileContent(int &linesNumber, int &columnsNumber);
 };

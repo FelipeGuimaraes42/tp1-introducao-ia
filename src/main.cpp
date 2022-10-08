@@ -1,8 +1,8 @@
 #include <iostream>
 #include <string>
 #include <vector>
-#include "BFS.cpp"
 #include "include/InputFile.hpp"
+#include "include/Graph.hpp"
 
 using namespace std;
 
@@ -10,9 +10,13 @@ int main(int argc, char **argv)
 {
     string fileName(argv[1]);
     InputFile inputFile(fileName);
-    vector<string> map = inputFile.getFileContent();
+
+    int numLines, numColumns;
+    vector<vector<float>> map = inputFile.getFileContent(numLines, numColumns);
 
     string option(argv[2]);
+
+    Graph solution(numLines * numColumns);
 
     if (option.compare("BFS") == 0)
     {
@@ -45,9 +49,9 @@ int main(int argc, char **argv)
     for (int i = 0; i < 4; i++)
     {
         positions[i] = argv[i + 3];
-        cout << positions[i] << " ";
+        // cout << positions[i] << " ";
     }
-    cout << endl;
+    // cout << endl;
 
     return 0;
 }
