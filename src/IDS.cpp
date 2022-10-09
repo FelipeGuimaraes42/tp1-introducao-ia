@@ -14,11 +14,19 @@ Graph IDS::getIDS(vector<string> initialPosition, int numLines, int numColumns)
     pair<int, int> actualVertice = {stoi(initialPosition.at(0)), stoi(initialPosition.at(1))};
     pair<int, int> finalVertice = {stoi(initialPosition.at(2)), stoi(initialPosition.at(3))};
 
-    bool isVisited[numLines][numColumns] = {false};
+    bool isVisited[numLines][numColumns];
+
+    for (int i = 0; i < numLines; i++)
+    {
+        for (int j = 0; j < numColumns; j++)
+        {
+            isVisited[i][j] = 0;
+        }
+    }
+
+    isVisited[actualVertice.first][actualVertice.second] = 1;
 
     stack<pair<int, int>> frontier;
-    stack<pair<int, int>> nextFrontier;
-    nextFrontier.push(actualVertice);
 
     while (true)
     {
@@ -27,56 +35,70 @@ Graph IDS::getIDS(vector<string> initialPosition, int numLines, int numColumns)
             break;
         }
 
-        isVisited[actualVertice.first][actualVertice.second] = true;
+        cout << actualVertice.first << " " << actualVertice.second << endl;
 
-        if (frontier.empty())
+        if ((actualVertice.first > 0) && (actualVertice.first < numLines - 1))
         {
-            while (!nextFrontier.empty())
+            if (!isVisited[actualVertice.first - 1][actualVertice.second])
             {
-                actualVertice = nextFrontier.top();
-                if ((actualVertice.first > 0) && (actualVertice.first < numLines - 1))
-                {
-                    if (!isVisited[actualVertice.first - 1][actualVertice.second])
-                        frontier.push({actualVertice.first - 1, actualVertice.second});
+                frontier.push({actualVertice.first - 1, actualVertice.second});
+                isVisited[actualVertice.first - 1][actualVertice.second] = 1;
+            }
 
-                    if (!isVisited[actualVertice.first + 1][actualVertice.second])
-                        frontier.push({actualVertice.first + 1, actualVertice.second});
-                }
-                if (actualVertice.first == 0)
-                {
-                    if (!isVisited[actualVertice.first + 1][actualVertice.second])
-                        frontier.push({actualVertice.first + 1, actualVertice.second});
-                }
-                if (actualVertice.first == numLines - 1)
-                {
-                    if (!isVisited[actualVertice.first - 1][actualVertice.second])
-                        frontier.push({actualVertice.first - 1, actualVertice.second});
-                }
-                if ((actualVertice.second > 0) && (actualVertice.second < numColumns - 1))
-                {
-                    if (!isVisited[actualVertice.first][actualVertice.second - 1])
-                        frontier.push({actualVertice.first, actualVertice.second - 1});
-                    if (!isVisited[actualVertice.first][actualVertice.second + 1])
-                        frontier.push({actualVertice.first, actualVertice.second + 1});
-                }
-                if (actualVertice.second == 0)
-                {
-                    if (!isVisited[actualVertice.first][actualVertice.second + 1])
-                        frontier.push({actualVertice.first, actualVertice.second + 1});
-                }
-                if (actualVertice.second == numColumns - 1)
-                {
-                    if (!isVisited[actualVertice.first][actualVertice.second - 1])
-                        frontier.push({actualVertice.first, actualVertice.second - 1});
-                }
-                nextFrontier.pop();
+            if (!isVisited[actualVertice.first + 1][actualVertice.second])
+            {
+                frontier.push({actualVertice.first + 1, actualVertice.second});
+                isVisited[actualVertice.first + 1][actualVertice.second] = 1;
+            }
+        }
+        if (actualVertice.first == 0)
+        {
+            if (!isVisited[actualVertice.first + 1][actualVertice.second])
+            {
+                frontier.push({actualVertice.first + 1, actualVertice.second});
+                isVisited[actualVertice.first + 1][actualVertice.second] = 1;
+            }
+        }
+        if (actualVertice.first == numLines - 1)
+        {
+            if (!isVisited[actualVertice.first - 1][actualVertice.second])
+            {
+                frontier.push({actualVertice.first - 1, actualVertice.second});
+                isVisited[actualVertice.first - 1][actualVertice.second] = 1;
             }
         }
 
-        cout << actualVertice.first << " " << actualVertice.second << endl;
+        if ((actualVertice.second > 0) && (actualVertice.second < numColumns - 1))
+        {
+            if (!isVisited[actualVertice.first][actualVertice.second - 1])
+            {
+                frontier.push({actualVertice.first, actualVertice.second - 1});
+                isVisited[actualVertice.first][actualVertice.second - 1] = 1;
+            }
+            if (!isVisited[actualVertice.first][actualVertice.second + 1])
+            {
+                frontier.push({actualVertice.first, actualVertice.second + 1});
+                isVisited[actualVertice.first][actualVertice.second + 1] = 1;
+            }
+        }
+        if (actualVertice.second == 0)
+        {
+            if (!isVisited[actualVertice.first][actualVertice.second + 1])
+            {
+                frontier.push({actualVertice.first, actualVertice.second + 1});
+                isVisited[actualVertice.first][actualVertice.second + 1] = 1;
+            }
+        }
+        if (actualVertice.second == numColumns - 1)
+        {
+            if (!isVisited[actualVertice.first][actualVertice.second - 1])
+            {
+                frontier.push({actualVertice.first, actualVertice.second - 1});
+                isVisited[actualVertice.first][actualVertice.second - 1] = 1;
+            }
+        }
 
         actualVertice = frontier.top();
-        nextFrontier.push(frontier.top());
         frontier.pop();
     }
 
