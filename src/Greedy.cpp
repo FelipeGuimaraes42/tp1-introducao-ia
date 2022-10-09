@@ -1,16 +1,15 @@
-class Greedy
-{
-private:
-    /* data */
-public:
-    Greedy(/* args */);
-    ~Greedy();
-};
+#include "include/Greedy.hpp"
 
-Greedy::Greedy(/* args */)
+Greedy::Greedy(vector<vector<float>> map)
 {
+    this->map = map;
 }
 
-Greedy::~Greedy()
+Greedy::~Greedy() {}
+
+Graph Greedy::getGreedy(vector<string> initialPosition, int numLines, int numColumns)
 {
+    Graph solution(numLines * numColumns);
+
+    return solution;
 }

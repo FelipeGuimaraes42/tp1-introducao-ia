@@ -1,3 +1,6 @@
+#ifndef GRAPH_CPP
+#define GRAPH_CPP
+
 #include <iostream>
 #include <list>
 
@@ -16,3 +19,5 @@ public:
     int getVerticesNumber();
     void addEdge(int v1, int v2);
 };
+
+#endif

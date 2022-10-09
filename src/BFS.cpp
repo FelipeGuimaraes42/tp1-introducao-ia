@@ -35,46 +35,50 @@ Graph BFS::getBFS(vector<string> initialPosition, int numLines, int numColumns)
                 actualVertice = nextFrontier.front();
                 if ((actualVertice.first > 0) && (actualVertice.first < numLines - 1))
                 {
-                    if(!isVisited[actualVertice.first - 1][actualVertice.second])
+                    if (!isVisited[actualVertice.first - 1][actualVertice.second])
                         frontier.push({actualVertice.first - 1, actualVertice.second});
-                    
-                    if(!isVisited[actualVertice.first + 1][actualVertice.second])
+
+                    if (!isVisited[actualVertice.first + 1][actualVertice.second])
                         frontier.push({actualVertice.first + 1, actualVertice.second});
                 }
                 if (actualVertice.first == 0)
                 {
-                    if(!isVisited[actualVertice.first + 1][actualVertice.second])
+                    if (!isVisited[actualVertice.first + 1][actualVertice.second])
                         frontier.push({actualVertice.first + 1, actualVertice.second});
                 }
                 if (actualVertice.first == numLines - 1)
                 {
-                    if(!isVisited[actualVertice.first - 1][actualVertice.second])
+                    if (!isVisited[actualVertice.first - 1][actualVertice.second])
                         frontier.push({actualVertice.first - 1, actualVertice.second});
                 }
                 if ((actualVertice.second > 0) && (actualVertice.second < numColumns - 1))
                 {
-                    if(!isVisited[actualVertice.first][actualVertice.second - 1])
+                    if (!isVisited[actualVertice.first][actualVertice.second - 1])
                         frontier.push({actualVertice.first, actualVertice.second - 1});
-                    if(!isVisited[actualVertice.first][actualVertice.second + 1])
+                    if (!isVisited[actualVertice.first][actualVertice.second + 1])
                         frontier.push({actualVertice.first, actualVertice.second + 1});
                 }
                 if (actualVertice.second == 0)
                 {
-                    if(!isVisited[actualVertice.first][actualVertice.second + 1])
+                    if (!isVisited[actualVertice.first][actualVertice.second + 1])
                         frontier.push({actualVertice.first, actualVertice.second + 1});
                 }
                 if (actualVertice.second == numColumns - 1)
                 {
-                    if(!isVisited[actualVertice.first][actualVertice.second - 1])
+                    if (!isVisited[actualVertice.first][actualVertice.second - 1])
                         frontier.push({actualVertice.first, actualVertice.second - 1});
                 }
                 nextFrontier.pop();
             }
         }
+
+        cout << actualVertice.first << " " << actualVertice.second << endl;
+
         actualVertice = frontier.front();
         nextFrontier.push(frontier.front());
         frontier.pop();
     }
+
     cout << actualVertice.first << " " << actualVertice.second << endl;
 
     return solution;

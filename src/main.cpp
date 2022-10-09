@@ -3,6 +3,8 @@
 #include <vector>
 #include "include/InputFile.hpp"
 #include "include/BFS.hpp"
+#include "include/IDS.hpp"
+#include "include/Greedy.hpp"
 
 using namespace std;
 
@@ -31,7 +33,8 @@ int main(int argc, char **argv)
     }
     else if (option.compare("IDS") == 0)
     {
-        // Call IDS
+        IDS ids(map);
+        solution = ids.getIDS(positions, numLines, numColumns);
     }
     else if (option.compare("UCS") == 0)
     {
@@ -39,7 +42,8 @@ int main(int argc, char **argv)
     }
     else if (option.compare("Greedy") == 0)
     {
-        // Call Greedy
+        Greedy greedy(map);
+        solution = greedy.getGreedy(positions, numLines, numColumns);
     }
     else if (option.compare("Astar") == 0)
     {
