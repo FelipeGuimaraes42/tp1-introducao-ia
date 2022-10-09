@@ -4,6 +4,7 @@
 #include "include/InputFile.hpp"
 #include "include/BFS.hpp"
 #include "include/IDS.hpp"
+#include "include/UCS.hpp"
 #include "include/Greedy.hpp"
 
 using namespace std;
@@ -38,7 +39,8 @@ int main(int argc, char **argv)
     }
     else if (option.compare("UCS") == 0)
     {
-        // Call UCS
+        UCS ucs(map);
+        solution = ucs.getUCS(positions, numLines, numColumns);
     }
     else if (option.compare("Greedy") == 0)
     {
