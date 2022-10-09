@@ -2,7 +2,7 @@
 #include <string>
 #include <vector>
 #include "include/InputFile.hpp"
-#include "include/Graph.hpp"
+#include "include/BFS.hpp"
 
 using namespace std;
 
@@ -16,27 +16,34 @@ int main(int argc, char **argv)
 
     string option(argv[2]);
 
-    Graph solution(numLines * numColumns);
+    vector<string> positions;
+    for (int i = 0; i < 4; i++)
+    {
+        positions.push_back(argv[i + 3]);
+    }
+
+    Graph solution;
 
     if (option.compare("BFS") == 0)
     {
-        // Call BFS
+        BFS bfs(map);
+        solution = bfs.getBFS(positions, numLines, numColumns);
     }
     else if (option.compare("IDS") == 0)
     {
-        // Call BFS
+        // Call IDS
     }
     else if (option.compare("UCS") == 0)
     {
-        // Call BFS
+        // Call UCS
     }
     else if (option.compare("Greedy") == 0)
     {
-        // Call BFS
+        // Call Greedy
     }
     else if (option.compare("Astar") == 0)
     {
-        // Call BFS
+        // Call Astar
     }
     else
     {
@@ -44,14 +51,6 @@ int main(int argc, char **argv)
         cout << "Try again with a valid option." << endl;
         exit(1);
     }
-
-    char *positions[4];
-    for (int i = 0; i < 4; i++)
-    {
-        positions[i] = argv[i + 3];
-        // cout << positions[i] << " ";
-    }
-    // cout << endl;
 
     return 0;
 }

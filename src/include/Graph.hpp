@@ -6,11 +6,13 @@ using namespace std;
 class Graph
 {
 private:
-    int verticeNumber;
+    int verticesNumber;
     list<int> *adj;
 
 public:
-    Graph(int V);
+    Graph();
+    Graph(int verticesNumber);
     ~Graph();
+    int getVerticesNumber();
     void addEdge(int v1, int v2);
 };

@@ -2,13 +2,19 @@
 
 using namespace std;
 
-Graph::Graph(int verticeNumber)
+Graph::Graph(int verticesNumber)
 {
-	this->verticeNumber = verticeNumber;
-	adj = new list<int>[verticeNumber];
+	this->verticesNumber = verticesNumber;
+	adj = new list<int>[verticesNumber];
 }
 
+Graph::Graph() {}
+
 Graph::~Graph() {}
+
+int Graph::getVerticesNumber() {
+	return this->verticesNumber;
+}
 
 void Graph::addEdge(int v1, int v2)
 {
