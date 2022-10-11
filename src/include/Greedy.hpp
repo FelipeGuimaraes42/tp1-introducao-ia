@@ -12,4 +12,5 @@ public:
     Greedy(vector<vector<float>> map);
     ~Greedy();
     Graph getGreedy(vector<string> initialPosition, int numLines, int numColumns);
+    vector<vector<float>> calculateHeuristic(vector<string> initialPosition, int numLines, int numColumns);
 };
