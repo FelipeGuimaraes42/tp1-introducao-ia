@@ -9,21 +9,22 @@ UCS::~UCS() {}
 
 void UCS::addToPriorityQueue(list<pair<int, int>> &frontier, vector<vector<float>> weights, pair<int, int> point)
 {
-    // TODO don't add weight equals to infinite
-    if (frontier.size() == 0)
+    bool isPushBack = true;
+    if (!frontier.empty())
     {
-        frontier.push_back(point);
-    }
-    else
-    {
-        for (list<pair<int, int>>::iterator it = frontier.begin(); it != frontier.end(); it++)
+        for (list<pair<int, int>>::iterator it = frontier.begin(); it != frontier.end(); ++it)
         {
-            if (weights[it->first][it->second] >= weights[point.first][point.second])
+            if (weights[point.first][point.second] <= weights[it->first][it->second])
             {
                 frontier.insert(it, point);
+                isPushBack = false;
                 break;
             }
         }
+    }
+    if (isPushBack)
+    {
+        frontier.push_back(point);
     }
 }
 
@@ -33,7 +34,8 @@ Graph UCS::getUCS(vector<string> initialPosition, int numLines, int numColumns)
     pair<int, int> actualVertice = {stoi(initialPosition.at(0)), stoi(initialPosition.at(1))};
     pair<int, int> finalVertice = {stoi(initialPosition.at(2)), stoi(initialPosition.at(3))};
 
-    if (this->map[finalVertice.first][finalVertice.second] >= INF) {
+    if (this->map[finalVertice.first][finalVertice.second] >= INF)
+    {
         cout << "Unreachable. Try another vertice." << endl;
         exit(0);
     }
@@ -46,16 +48,22 @@ Graph UCS::getUCS(vector<string> initialPosition, int numLines, int numColumns)
         vector<float> aux;
         for (int j = 0; j < numColumns; j++)
         {
-            isVisited[i][j] = false;
+            if (this->map[i][j] > 6.0)
+            {
+                isVisited[i][j] = true;
+            }
+            else
+            {
+                isVisited[i][j] = false;
+            }
             aux.push_back(INF);
         }
         weights.push_back(aux);
     }
     weights[actualVertice.first][actualVertice.second] = 0;
-    isVisited[actualVertice.first][actualVertice.second] = true;
 
     list<pair<int, int>> frontier;
-    bool isBreak = true;
+    pair<int, int> adjVertice;
 
     while (true)
     {
@@ -63,127 +71,150 @@ Graph UCS::getUCS(vector<string> initialPosition, int numLines, int numColumns)
         {
             break;
         }
-
-        cout << actualVertice.first << " " << actualVertice.second << endl;
+        isVisited[actualVertice.first][actualVertice.second] = true;
 
         float acumulatedDistance = weights[actualVertice.first][actualVertice.second];
 
         if ((actualVertice.first > 0) && (actualVertice.first < numLines - 1))
         {
-            if (!isVisited[actualVertice.first - 1][actualVertice.second])
+            adjVertice = {actualVertice.first - 1, actualVertice.second};
+            if (!isVisited[adjVertice.first][adjVertice.second])
             {
-                float aux = this->map[actualVertice.first - 1][actualVertice.second] + acumulatedDistance;
-                if (weights[actualVertice.first - 1][actualVertice.second] > aux)
-                    weights[actualVertice.first - 1][actualVertice.second] = aux;
-                addToPriorityQueue(frontier, weights, {actualVertice.first - 1, actualVertice.second});
+                float aux = this->map[adjVertice.first][adjVertice.second] + acumulatedDistance;
+                if (weights[adjVertice.first][adjVertice.second] > aux)
+                {
+                    weights[adjVertice.first][adjVertice.second] = aux;
+                    addToPriorityQueue(frontier, weights, {adjVertice.first, adjVertice.second});
+                }
             }
 
-            if (!isVisited[actualVertice.first + 1][actualVertice.second])
+            adjVertice = {actualVertice.first + 1, actualVertice.second};
+            if (!isVisited[adjVertice.first][adjVertice.second])
             {
-                float aux = this->map[actualVertice.first + 1][actualVertice.second] + acumulatedDistance;
-                if (weights[actualVertice.first + 1][actualVertice.second] > aux)
-                    weights[actualVertice.first + 1][actualVertice.second] = aux;
-                addToPriorityQueue(frontier, weights, {actualVertice.first + 1, actualVertice.second});
+                float aux = this->map[adjVertice.first][adjVertice.second] + acumulatedDistance;
+                if (weights[adjVertice.first][adjVertice.second] > aux)
+                {
+                    weights[adjVertice.first][adjVertice.second] = aux;
+                    addToPriorityQueue(frontier, weights, {adjVertice.first, adjVertice.second});
+                }
             }
         }
         if (actualVertice.first == 0)
         {
-            if (!isVisited[actualVertice.first + 1][actualVertice.second])
+            adjVertice = {actualVertice.first + 1, actualVertice.second};
+            if (!isVisited[adjVertice.first][adjVertice.second])
             {
-                float aux = this->map[actualVertice.first + 1][actualVertice.second] + acumulatedDistance;
-                if (weights[actualVertice.first + 1][actualVertice.second] > aux)
-                    weights[actualVertice.first + 1][actualVertice.second] = aux;
-                addToPriorityQueue(frontier, weights, {actualVertice.first + 1, actualVertice.second});
+                float aux = this->map[adjVertice.first][adjVertice.second] + acumulatedDistance;
+                if (weights[adjVertice.first][adjVertice.second] > aux)
+                {
+                    weights[adjVertice.first][adjVertice.second] = aux;
+                    addToPriorityQueue(frontier, weights, {adjVertice.first, adjVertice.second});
+                }
             }
         }
         if (actualVertice.first == numLines - 1)
         {
-            if (!isVisited[actualVertice.first - 1][actualVertice.second])
+            adjVertice = {actualVertice.first - 1, actualVertice.second};
+            if (!isVisited[adjVertice.first][adjVertice.second])
             {
-                float aux = this->map[actualVertice.first - 1][actualVertice.second] + acumulatedDistance;
-                if (weights[actualVertice.first - 1][actualVertice.second] > aux)
-                    weights[actualVertice.first - 1][actualVertice.second] = aux;
-                addToPriorityQueue(frontier, weights, {actualVertice.first - 1, actualVertice.second});
+                float aux = this->map[adjVertice.first][adjVertice.second] + acumulatedDistance;
+                if (weights[adjVertice.first][adjVertice.second] > aux)
+                {
+                    weights[adjVertice.first][adjVertice.second] = aux;
+                    addToPriorityQueue(frontier, weights, {adjVertice.first, adjVertice.second});
+                }
             }
         }
 
         if ((actualVertice.second > 0) && (actualVertice.second < numColumns - 1))
         {
-            if (!isVisited[actualVertice.first][actualVertice.second - 1])
+            adjVertice = {actualVertice.first, actualVertice.second - 1};
+            if (!isVisited[adjVertice.first][adjVertice.second])
             {
-                float aux = this->map[actualVertice.first][actualVertice.second - 1] + acumulatedDistance;
-                if (weights[actualVertice.first][actualVertice.second - 1] > aux)
-                    weights[actualVertice.first][actualVertice.second - 1] = aux;
-                addToPriorityQueue(frontier, weights, {actualVertice.first, actualVertice.second - 1});
+                float aux = this->map[adjVertice.first][adjVertice.second] + acumulatedDistance;
+                if (weights[adjVertice.first][adjVertice.second] > aux)
+                {
+                    weights[adjVertice.first][adjVertice.second] = aux;
+                    addToPriorityQueue(frontier, weights, {adjVertice.first, adjVertice.second});
+                }
             }
-            if (!isVisited[actualVertice.first][actualVertice.second + 1])
+
+            adjVertice = {actualVertice.first, actualVertice.second + 1};
+            if (!isVisited[adjVertice.first][adjVertice.second])
             {
-                float aux = this->map[actualVertice.first][actualVertice.second + 1] + acumulatedDistance;
-                if (weights[actualVertice.first][actualVertice.second + 1] > aux)
-                    weights[actualVertice.first][actualVertice.second + 1] = aux;
-                addToPriorityQueue(frontier, weights, {actualVertice.first, actualVertice.second + 1});
+                float aux = this->map[adjVertice.first][adjVertice.second] + acumulatedDistance;
+                if (weights[adjVertice.first][adjVertice.second] > aux)
+                {
+                    weights[adjVertice.first][adjVertice.second] = aux;
+                    addToPriorityQueue(frontier, weights, {adjVertice.first, adjVertice.second});
+                }
             }
         }
         if (actualVertice.second == 0)
         {
-            if (!isVisited[actualVertice.first][actualVertice.second + 1])
+            adjVertice = {actualVertice.first, actualVertice.second + 1};
+            if (!isVisited[adjVertice.first][adjVertice.second])
             {
-                float aux = this->map[actualVertice.first][actualVertice.second + 1] + acumulatedDistance;
-                if (weights[actualVertice.first][actualVertice.second + 1] > aux)
-                    weights[actualVertice.first][actualVertice.second + 1] = aux;
-                addToPriorityQueue(frontier, weights, {actualVertice.first, actualVertice.second + 1});
+                float aux = this->map[adjVertice.first][adjVertice.second] + acumulatedDistance;
+                if (weights[adjVertice.first][adjVertice.second] > aux)
+                {
+                    weights[adjVertice.first][adjVertice.second] = aux;
+                    addToPriorityQueue(frontier, weights, {adjVertice.first, adjVertice.second});
+                }
             }
         }
         if (actualVertice.second == numColumns - 1)
         {
-            if (!isVisited[actualVertice.first][actualVertice.second - 1])
+            adjVertice = {actualVertice.first, actualVertice.second - 1};
+            if (!isVisited[adjVertice.first][adjVertice.second])
             {
-                float aux = this->map[actualVertice.first][actualVertice.second - 1] + acumulatedDistance;
-                if (weights[actualVertice.first][actualVertice.second - 1] > aux)
-                    weights[actualVertice.first][actualVertice.second - 1] = aux;
-                addToPriorityQueue(frontier, weights, {actualVertice.first, actualVertice.second - 1});
+                float aux = this->map[adjVertice.first][adjVertice.second] + acumulatedDistance;
+                if (weights[adjVertice.first][adjVertice.second] > aux)
+                {
+                    weights[adjVertice.first][adjVertice.second] = aux;
+                    addToPriorityQueue(frontier, weights, {adjVertice.first, adjVertice.second});
+                }
             }
+        }
+
+        if (frontier.empty())
+        {
+            cout << "Cannot leave the vertice" << endl;
+            exit(0);
         }
 
         actualVertice = frontier.front();
         frontier.pop_front();
-
-        isVisited[actualVertice.first][actualVertice.second] = true;
     }
 
-    for (int i = 0; i < numLines; i++)
-    {
-        for (int j = 0; j < numColumns; j++)
-        {
-            cout << weights[i][j] << "\t";
-        }
-        cout << "\n";
-    }
+    cout << weights[actualVertice.first][actualVertice.second] << endl;
 
     return solution;
 }
 
-        // cout << actualVertice.first << " " << actualVertice.second << endl;
+// cout << "Node: " << actualVertice.first << "," << actualVertice.second << endl;
 
-        // for (int i = 0; i < numLines; i++)
-        // {
-        //     for (int j = 0; j < numColumns; j++)
-        //     {
-        //         cout << weights[i][j] << "\t";
-        //     }
-        //     cout << "\n";
-        // }
+// for (int i = 0; i < numLines; i++)
+// {
+//     for (int j = 0; j < numColumns; j++)
+//     {
+//         cout << weights[i][j] << "\t";
+//     }
+//     cout << "\n";
+// }
 
-        // for (int i = 0; i < numLines; i++)
-        // {
-        //     for (int j = 0; j < numColumns; j++)
-        //     {
-        //         cout << isVisited[i][j] << "\t";
-        //     }
-        //     cout << "\n";
-        // }
+// for (int i = 0; i < numLines; i++)
+// {
+//     for (int j = 0; j < numColumns; j++)
+//     {
+//         cout << isVisited[i][j] << "\t";
+//     }
+//     cout << "\n";
+// }
 
-        // for (list<pair<int, int>>::iterator it = frontier.begin(); it != frontier.end(); it++)
-        // {
-        //     cout << weights[it->first][it->second] << "\t";
-        // }
+// cout << "List: ";
+//     for (list<pair<int, int>>::iterator it = frontier.begin(); it != frontier.end(); it++)
+//     {
+//         cout << it->first << "," << it->second << "-" << weights[it->first][it->second] << "  ";
+//     }
+//     cout << endl;

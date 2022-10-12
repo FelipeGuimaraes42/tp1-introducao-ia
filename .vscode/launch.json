@@ -9,7 +9,7 @@
             "type": "cppdbg",
             "request": "launch",
             "program": "${workspaceRoot}/src/a.exe",
-            "args": ["src/map.txt", "UCS", "1", "2", "", "0"],
+            "args": ["maps/test.map", "UCS", "1", "2", "1", "4"],
             "stopAtEntry": false,
             "cwd": "${workspaceFolder}",
             "externalConsole": true,
