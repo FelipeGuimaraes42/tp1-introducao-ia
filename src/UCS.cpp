@@ -9,6 +9,7 @@ UCS::~UCS() {}
 
 void UCS::addToPriorityQueue(list<pair<int, int>> &frontier, vector<vector<float>> weights, pair<int, int> point)
 {
+    // TODO don't add weight equals to infinite
     if (frontier.size() == 0)
     {
         frontier.push_back(point);
@@ -31,6 +32,11 @@ Graph UCS::getUCS(vector<string> initialPosition, int numLines, int numColumns)
     Graph solution(numLines * numColumns);
     pair<int, int> actualVertice = {stoi(initialPosition.at(0)), stoi(initialPosition.at(1))};
     pair<int, int> finalVertice = {stoi(initialPosition.at(2)), stoi(initialPosition.at(3))};
+
+    if (this->map[finalVertice.first][finalVertice.second] >= INF) {
+        cout << "Unreachable. Try another vertice." << endl;
+        exit(0);
+    }
 
     bool isVisited[numLines][numColumns];
     vector<vector<float>> weights;
@@ -57,6 +63,8 @@ Graph UCS::getUCS(vector<string> initialPosition, int numLines, int numColumns)
         {
             break;
         }
+
+        cout << actualVertice.first << " " << actualVertice.second << endl;
 
         float acumulatedDistance = weights[actualVertice.first][actualVertice.second];
 
@@ -143,19 +151,39 @@ Graph UCS::getUCS(vector<string> initialPosition, int numLines, int numColumns)
         isVisited[actualVertice.first][actualVertice.second] = true;
     }
 
-    // for (int i = 0; i < numLines; i++)
-    // {
-    //     for (int j = 0; j < numColumns; j++)
-    //     {
-    //         cout << weights[i][j] << "\t";
-    //     }
-    //     cout << "\n";
-    // }
+    for (int i = 0; i < numLines; i++)
+    {
+        for (int j = 0; j < numColumns; j++)
+        {
+            cout << weights[i][j] << "\t";
+        }
+        cout << "\n";
+    }
 
     return solution;
 }
 
-// for (list<pair<int, int>>::iterator it = frontier.begin(); it != frontier.end(); it++)
-// {
-//     cout << weights[it->first][it->second] << "\t";
-// }
+        // cout << actualVertice.first << " " << actualVertice.second << endl;
+
+        // for (int i = 0; i < numLines; i++)
+        // {
+        //     for (int j = 0; j < numColumns; j++)
+        //     {
+        //         cout << weights[i][j] << "\t";
+        //     }
+        //     cout << "\n";
+        // }
+
+        // for (int i = 0; i < numLines; i++)
+        // {
+        //     for (int j = 0; j < numColumns; j++)
+        //     {
+        //         cout << isVisited[i][j] << "\t";
+        //     }
+        //     cout << "\n";
+        // }
+
+        // for (list<pair<int, int>>::iterator it = frontier.begin(); it != frontier.end(); it++)
+        // {
+        //     cout << weights[it->first][it->second] << "\t";
+        // }
