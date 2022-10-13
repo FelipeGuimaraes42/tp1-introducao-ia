@@ -12,7 +12,8 @@ Graph::Graph() {}
 
 Graph::~Graph() {}
 
-int Graph::getVerticesNumber() {
+int Graph::getVerticesNumber()
+{
 	return this->verticesNumber;
 }
 

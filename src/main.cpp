@@ -2,10 +2,12 @@
 #include <string>
 #include <vector>
 #include "include/InputFile.hpp"
+#include "include/Graph.hpp"
 #include "include/BFS.hpp"
 #include "include/IDS.hpp"
 #include "include/UCS.hpp"
 #include "include/Greedy.hpp"
+#include "include/AStar.hpp"
 
 using namespace std;
 
@@ -49,7 +51,8 @@ int main(int argc, char **argv)
     }
     else if (option.compare("Astar") == 0)
     {
-        // Call Astar
+        AStar aStar(map);
+        solution = aStar.getAStar(positions, numLines, numColumns);
     }
     else
     {

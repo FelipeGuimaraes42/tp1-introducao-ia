@@ -42,7 +42,7 @@ vector<vector<float>> InputFile::convertSymbolsToWeight(const int numLines, cons
         }
         pesos.push_back(line);
     }
-    printMap(pesos, numLines, numColumns);
+    // printMap(pesos, numLines, numColumns);
     return pesos;
 }
 

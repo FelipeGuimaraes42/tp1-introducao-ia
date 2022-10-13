@@ -26,7 +26,7 @@ vector<vector<int>> Greedy::calculateManhattanDistances(const pair<int, int> fin
     return distances;
 }
 
-vector<vector<double>> Greedy::calculateEuclidianDistance(const pair<int, int> finalPosition, const int numLines, const int numColumns)
+vector<vector<double>> Greedy::calculateEuclideanDistance(const pair<int, int> finalPosition, const int numLines, const int numColumns)
 {
     vector<vector<double>> distances;
     for (int x = 0; x < numLines; x++)
@@ -37,7 +37,6 @@ vector<vector<double>> Greedy::calculateEuclidianDistance(const pair<int, int> f
             double xd = finalPosition.first - x;
             double yd = finalPosition.second - y;
             double distance = sqrt(xd * xd + yd * yd);
-            // distance += this->map[x][y];
             aux.push_back(distance);
             // cout << distance << "\t";
         }
@@ -76,7 +75,7 @@ Graph Greedy::getGreedy(vector<string> initialPosition, int numLines, int numCol
     }
 
     // vector<vector<int>> heuristicValue = this->calculateManhattanDistances(finalVertice, numLines, numColumns);
-    vector<vector<double>> heuristicValue = this->calculateEuclidianDistance(finalVertice, numLines, numColumns);
+    vector<vector<double>> heuristicValue = this->calculateEuclideanDistance(finalVertice, numLines, numColumns);
     double result = 0;
 
     pair<int, int> actualVertice = initialVertice;
@@ -85,20 +84,22 @@ Graph Greedy::getGreedy(vector<string> initialPosition, int numLines, int numCol
 
     while (true)
     {
+        vector<pair<int, int>> frontier;
+        pair<int, int> adjVertice;
+
         if (retries == 3)
         {
             cout << "Cannot leave the vertice" << endl;
             exit(0);
         }
-        vector<pair<int, int>> frontier;
-        pair<int, int> adjVertice;
-        cout << "Node: " << actualVertice.first << "," << actualVertice.second << endl;
 
         if (finalVertice.first == actualVertice.first && finalVertice.second == actualVertice.second)
         {
             break;
         }
+
         isVisited[actualVertice.first][actualVertice.second] = true;
+        // cout << "Node: " << actualVertice.first << "," << actualVertice.second << endl;
 
         float acumulatedDistance = heuristicValue[actualVertice.first][actualVertice.second];
 
@@ -166,8 +167,6 @@ Graph Greedy::getGreedy(vector<string> initialPosition, int numLines, int numCol
 
         if (frontier.empty())
         {
-            // cout << "Cannot leave the vertice" << endl;
-            // exit(0);
             actualVertice = initialVertice;
             result = 0;
             retries++;

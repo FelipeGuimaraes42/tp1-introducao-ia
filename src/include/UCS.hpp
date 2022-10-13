@@ -11,10 +11,10 @@ class UCS
 {
 private:
     vector<vector<float>> map;
+    void addToPriorityQueue(list<pair<int, int>> &list, vector<vector<float>> weights, pair<int, int> point);
 
 public:
     UCS(const vector<vector<float>> map);
     ~UCS();
-    void addToPriorityQueue(list<pair<int, int>> &list, vector<vector<float>> weights, pair<int, int> point);
     Graph getUCS(vector<string> initialPosition, int numLines, int numColumns);
 };

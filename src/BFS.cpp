@@ -34,8 +34,6 @@ Graph BFS::getBFS(vector<string> initialPosition, int numLines, int numColumns)
             break;
         }
 
-        cout << actualVertice.first << " " << actualVertice.second << endl;
-
         if ((actualVertice.first > 0) && (actualVertice.first < numLines - 1))
         {
             if (!isVisited[actualVertice.first - 1][actualVertice.second])
@@ -101,7 +99,7 @@ Graph BFS::getBFS(vector<string> initialPosition, int numLines, int numColumns)
         frontier.pop();
     }
 
-    cout << actualVertice.first << " " << actualVertice.second << endl;
-
     return solution;
 }
+
+// cout << actualVertice.first << " " << actualVertice.second << endl;
