@@ -1,6 +1,8 @@
 #ifndef GRAPH_CPP
 #define GRAPH_CPP
 
+#include "Node.hpp"
+
 #include <iostream>
 #include <list>
 
@@ -10,14 +12,15 @@ class Graph
 {
 private:
     int verticesNumber;
-    list<int> *adj;
+    Node **adjLists;
 
 public:
     Graph();
     Graph(int verticesNumber);
     ~Graph();
     int getVerticesNumber();
-    void addEdge(int v1, int v2);
+    void addEdge(const int s, const int d, Node *vertice);
+    void printGraph();
 };
 
 #endif

@@ -5,7 +5,11 @@ using namespace std;
 Graph::Graph(int verticesNumber)
 {
 	this->verticesNumber = verticesNumber;
-	adj = new list<int>[verticesNumber];
+	adjLists = {nullptr};
+	// for (int i = 0; i < verticesNumber; i++)
+	// {
+	// 	this->adjLists[i] = nullptr;
+	// }
 }
 
 Graph::Graph() {}
@@ -17,7 +21,23 @@ int Graph::getVerticesNumber()
 	return this->verticesNumber;
 }
 
-void Graph::addEdge(int v1, int v2)
+void Graph::addEdge(const int s, const int d, Node *vertice)
 {
-	adj[v1].push_back(v2);
+	this->adjLists[s] = vertice;
+}
+
+void Graph::printGraph()
+{
+	int v;
+	for (v = 0; v < this->verticesNumber; v++)
+	{
+		Node *temp = this->adjLists[v];
+		cout << "\n Vertex " << v<<  "%d\n: ";
+		while (temp)
+		{
+			printf("%d -> ", temp->getVertex());
+			temp = temp->getNextNode();
+		}
+		printf("\n");
+	}
 }
