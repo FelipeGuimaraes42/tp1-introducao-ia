@@ -20,7 +20,14 @@ Graph IDS::getIDS(vector<string> initialPosition, int numLines, int numColumns)
     {
         for (int j = 0; j < numColumns; j++)
         {
-            isVisited[i][j] = 0;
+            if (this->map[i][j] > 6.0)
+            {
+                isVisited[i][j] = true;
+            }
+            else
+            {
+                isVisited[i][j] = false;
+            }
         }
     }
 

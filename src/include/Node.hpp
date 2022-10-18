@@ -15,11 +15,14 @@ private:
     Node *next;
 
 public:
+    Node();
     Node(const int vertex, const float weight, const pair<int, int> points, Node *previous);
     ~Node();
     void setNextNode(Node *next);
     Node *getNextNode();
+    Node *getPreviousNode();
     int getVertex();
+    pair<int, int> getPoints();
 };
 
 #endif
