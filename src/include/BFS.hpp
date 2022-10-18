@@ -1,7 +1,8 @@
 #include <vector>
 #include <queue>
+#include <iostream>
 #include <string>
-#include "Graph.hpp"
+#include "Node.hpp"
 
 using namespace std;
 
@@ -12,5 +13,6 @@ private:
 public:
     BFS(const vector<vector<float>> map);
     ~BFS();
-    Graph getBFS(vector<string> initialPosition, int numLines, int numColumns);
+    void getBFS(vector<string> initialPosition, int numLines, int numColumns);
+    void printGraph(vector<Node> adj[], int V);
 };

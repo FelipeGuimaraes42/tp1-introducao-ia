@@ -6,7 +6,7 @@ Node::Node(const int vertex, const float weight, const pair<int, int> points, No
     this->weight = weight;
     this->points = points;
     this->previous = previous;
-    this->next = nullptr;
+    // this->next = nullptr;
 }
 
 Node::~Node() {}
@@ -20,6 +20,7 @@ Node *Node::getNextNode()
 {
     return this->next;
 }
+
 int Node::getVertex(){
     return this->vertex;
 }

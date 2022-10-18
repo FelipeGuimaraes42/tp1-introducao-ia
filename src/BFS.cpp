@@ -7,11 +7,25 @@ BFS::BFS(const vector<vector<float>> map)
 
 BFS::~BFS() {}
 
-Graph BFS::getBFS(vector<string> initialPosition, int numLines, int numColumns)
+void BFS::printGraph(vector<Node> adj[], int V)
 {
-    Graph solution(numLines * numColumns);
+    for (int d = 0; d < V; ++d)
+    {
+        cout << "\n Vertex "
+             << d << ":";
+        for (auto x : adj[d])
+            cout << "-> " << x.getVertex();
+        printf("\n");
+    }
+}
+
+void BFS::getBFS(vector<string> initialPosition, int numLines, int numColumns)
+{
+    vector<Node> graph[numLines * numColumns];
     pair<int, int> actualVertice = {stoi(initialPosition.at(0)), stoi(initialPosition.at(1))};
     pair<int, int> finalVertice = {stoi(initialPosition.at(2)), stoi(initialPosition.at(3))};
+    Node *previousNode = nullptr;
+    int nodeCounter = 0;
 
     bool isVisited[numLines][numColumns];
 
@@ -33,6 +47,9 @@ Graph BFS::getBFS(vector<string> initialPosition, int numLines, int numColumns)
         {
             break;
         }
+        // Adicionar validação de nó de valor infinito aqui também!!!!
+        Node node(++nodeCounter, this->map[actualVertice.first][actualVertice.second], actualVertice, previousNode);
+        graph[nodeCounter - 1].push_back(node);
 
         if ((actualVertice.first > 0) && (actualVertice.first < numLines - 1))
         {
@@ -97,9 +114,8 @@ Graph BFS::getBFS(vector<string> initialPosition, int numLines, int numColumns)
 
         actualVertice = frontier.front();
         frontier.pop();
+        previousNode = &node;
     }
 
-    return solution;
+    printGraph(graph, numLines * numColumns);
 }
-
-// cout << actualVertice.first << " " << actualVertice.second << endl;

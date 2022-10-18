@@ -27,32 +27,32 @@ int main(int argc, char **argv)
         positions.push_back(argv[i + 3]);
     }
 
-    Graph solution;
+    Graph graph;
 
     if (option.compare("BFS") == 0)
     {
         BFS bfs(map);
-        solution = bfs.getBFS(positions, numLines, numColumns);
+        bfs.getBFS(positions, numLines, numColumns);
     }
     else if (option.compare("IDS") == 0)
     {
         IDS ids(map);
-        solution = ids.getIDS(positions, numLines, numColumns);
+        graph = ids.getIDS(positions, numLines, numColumns);
     }
     else if (option.compare("UCS") == 0)
     {
         UCS ucs(map);
-        solution = ucs.getUCS(positions, numLines, numColumns);
+        graph = ucs.getUCS(positions, numLines, numColumns);
     }
     else if (option.compare("Greedy") == 0)
     {
         Greedy greedy(map);
-        solution = greedy.getGreedy(positions, numLines, numColumns);
+        graph = greedy.getGreedy(positions, numLines, numColumns);
     }
     else if (option.compare("Astar") == 0)
     {
         AStar aStar(map);
-        solution = aStar.getAStar(positions, numLines, numColumns);
+        graph = aStar.getAStar(positions, numLines, numColumns);
     }
     else
     {
@@ -60,6 +60,9 @@ int main(int argc, char **argv)
         cout << "Try again with a valid option." << endl;
         exit(1);
     }
+
+    // graph.printGraph();
+    // graph.printGraphV2(5);
 
     return 0;
 }

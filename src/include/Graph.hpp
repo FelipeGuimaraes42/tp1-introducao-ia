@@ -4,7 +4,7 @@
 #include "Node.hpp"
 
 #include <iostream>
-#include <list>
+#include <vector>
 
 using namespace std;
 
@@ -12,14 +12,14 @@ class Graph
 {
 private:
     int verticesNumber;
-    Node **adjLists;
+    vector<Node *>adjLists;
 
 public:
     Graph();
     Graph(int verticesNumber);
     ~Graph();
     int getVerticesNumber();
-    void addEdge(const int s, const int d, Node *vertice);
+    void addEdge(Node *vertice);
     void printGraph();
 };
 
