@@ -25,8 +25,11 @@ void BFS::getBFS(vector<string> initialPosition, int numLines, int numColumns)
     vector<Node> graph[numLines * numColumns];
     pair<int, int> actualVertice = {stoi(initialPosition.at(0)), stoi(initialPosition.at(1))};
     pair<int, int> finalVertice = {stoi(initialPosition.at(2)), stoi(initialPosition.at(3))};
-    Node *lastVertex = nullptr;
+    Node headNode;
+    vector<Node> vertexList;
+    vertexList.push_back(headNode);
     int nodeCounter = 0;
+    int previousNodeCounter = 0;
 
     bool isVisited[numLines][numColumns];
 
@@ -53,10 +56,10 @@ void BFS::getBFS(vector<string> initialPosition, int numLines, int numColumns)
 
     while (true)
     {
-        Node node(nodeCounter, this->map[actualVertice.first][actualVertice.second], actualVertice, lastVertex);
+        Node node(nodeCounter, this->map[actualVertice.first][actualVertice.second], actualVertice, &vertexList.at(nodeCounter));
         graph[nodeCounter].push_back(node);
         // previousNode = &node;
-        lastVertex = &(graph[nodeCounter].at(0));
+        vertexList.push_back(node);
         // lastVertex = &(graph[nodeCounter].at(0));
 
         if (finalVertice.first == actualVertice.first && finalVertice.second == actualVertice.second)
@@ -71,7 +74,7 @@ void BFS::getBFS(vector<string> initialPosition, int numLines, int numColumns)
             {
                 frontier.push({adjVertice.first, adjVertice.second});
                 isVisited[adjVertice.first][adjVertice.second] = true;
-                Node node(nodeCounter, this->map[adjVertice.first][adjVertice.second], adjVertice, lastVertex);
+                Node node(nodeCounter, this->map[adjVertice.first][adjVertice.second], adjVertice, &vertexList.at(nodeCounter+1));
                 graph[nodeCounter].push_back(node);
             }
 
@@ -80,7 +83,7 @@ void BFS::getBFS(vector<string> initialPosition, int numLines, int numColumns)
             {
                 frontier.push({adjVertice.first, adjVertice.second});
                 isVisited[adjVertice.first][adjVertice.second] = true;
-                Node node(nodeCounter, this->map[adjVertice.first][adjVertice.second], adjVertice, lastVertex);
+                Node node(nodeCounter, this->map[adjVertice.first][adjVertice.second], adjVertice, &vertexList.at(nodeCounter+1));
                 graph[nodeCounter].push_back(node);
             }
         }
@@ -91,7 +94,7 @@ void BFS::getBFS(vector<string> initialPosition, int numLines, int numColumns)
             {
                 frontier.push({adjVertice.first, adjVertice.second});
                 isVisited[adjVertice.first][adjVertice.second] = true;
-                Node node(nodeCounter, this->map[adjVertice.first][adjVertice.second], adjVertice, lastVertex);
+                Node node(nodeCounter, this->map[adjVertice.first][adjVertice.second], adjVertice, &vertexList.at(nodeCounter+1));
                 graph[nodeCounter].push_back(node);
             }
         }
@@ -102,7 +105,7 @@ void BFS::getBFS(vector<string> initialPosition, int numLines, int numColumns)
             {
                 frontier.push({adjVertice.first, adjVertice.second});
                 isVisited[adjVertice.first][adjVertice.second] = true;
-                Node node(nodeCounter, this->map[adjVertice.first][adjVertice.second], adjVertice, lastVertex);
+                Node node(nodeCounter, this->map[adjVertice.first][adjVertice.second], adjVertice, &vertexList.at(nodeCounter+1));
                 graph[nodeCounter].push_back(node);
             }
         }
@@ -114,7 +117,7 @@ void BFS::getBFS(vector<string> initialPosition, int numLines, int numColumns)
             {
                 frontier.push({adjVertice.first, adjVertice.second});
                 isVisited[adjVertice.first][adjVertice.second] = true;
-                Node node(nodeCounter, this->map[adjVertice.first][adjVertice.second], adjVertice, lastVertex);
+                Node node(nodeCounter, this->map[adjVertice.first][adjVertice.second], adjVertice, &vertexList.at(nodeCounter+1));
                 graph[nodeCounter].push_back(node);
             }
 
@@ -123,7 +126,7 @@ void BFS::getBFS(vector<string> initialPosition, int numLines, int numColumns)
             {
                 frontier.push({adjVertice.first, adjVertice.second});
                 isVisited[adjVertice.first][adjVertice.second] = true;
-                Node node(nodeCounter, this->map[adjVertice.first][adjVertice.second], adjVertice, lastVertex);
+                Node node(nodeCounter, this->map[adjVertice.first][adjVertice.second], adjVertice, &vertexList.at(nodeCounter+1));
                 graph[nodeCounter].push_back(node);
             }
         }
@@ -134,7 +137,7 @@ void BFS::getBFS(vector<string> initialPosition, int numLines, int numColumns)
             {
                 frontier.push({adjVertice.first, adjVertice.second});
                 isVisited[adjVertice.first][adjVertice.second] = true;
-                Node node(nodeCounter, this->map[adjVertice.first][adjVertice.second], adjVertice, lastVertex);
+                Node node(nodeCounter, this->map[adjVertice.first][adjVertice.second], adjVertice, &vertexList.at(nodeCounter+1));
                 graph[nodeCounter].push_back(node);
             }
         }
@@ -145,12 +148,13 @@ void BFS::getBFS(vector<string> initialPosition, int numLines, int numColumns)
             {
                 frontier.push({adjVertice.first, adjVertice.second});
                 isVisited[adjVertice.first][adjVertice.second] = true;
-                Node node(nodeCounter, this->map[adjVertice.first][adjVertice.second], adjVertice, lastVertex);
+                Node node(nodeCounter, this->map[adjVertice.first][adjVertice.second], adjVertice, &vertexList.at(nodeCounter+1));
                 graph[nodeCounter].push_back(node);
             }
         }
 
         nodeCounter++;
+        previousNodeCounter++;
         actualVertice = frontier.front();
         frontier.pop();
     }
@@ -159,11 +163,11 @@ void BFS::getBFS(vector<string> initialPosition, int numLines, int numColumns)
     // cout << lastVertex->getPreviousNode()->getPoints().first << "," << lastVertex->getPreviousNode()->getPoints().second << endl;
 
     // Fix the previous node logic
-    Node *aux = lastVertex;
+    Node *aux = &vertexList.at(nodeCounter+1);
     for (int i = nodeCounter; i >= 0; i--)
     {
-        aux = aux->getPreviousNode();
         cout << aux->getPoints().first << "," << aux->getPoints().second << "\t";
+        aux = aux->getPreviousNode();
     }
     cout << endl;
 }
