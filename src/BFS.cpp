@@ -22,14 +22,8 @@ void BFS::printGraph(vector<Node> adj[], int V)
 
 void BFS::getBFS(vector<string> initialPosition, int numLines, int numColumns)
 {
-    vector<Node> graph[numLines * numColumns];
-    pair<int, int> actualVertice = {stoi(initialPosition.at(0)), stoi(initialPosition.at(1))};
-    pair<int, int> finalVertice = {stoi(initialPosition.at(2)), stoi(initialPosition.at(3))};
-    Node headNode;
-    vector<Node> vertexList;
-    vertexList.push_back(headNode);
-    int nodeCounter = 0;
-    int previousNodeCounter = 0;
+    pair<int, int> initialPoints = {stoi(initialPosition.at(0)), stoi(initialPosition.at(1))};
+    pair<int, int> finalPoints = {stoi(initialPosition.at(2)), stoi(initialPosition.at(3))};
 
     bool isVisited[numLines][numColumns];
 
@@ -48,123 +42,130 @@ void BFS::getBFS(vector<string> initialPosition, int numLines, int numColumns)
         }
     }
 
-    isVisited[actualVertice.first][actualVertice.second] = true;
+    isVisited[initialPoints.first][initialPoints.second] = true;
 
-    queue<pair<int, int>> frontier;
+    int nodeCounter = 0;
+    int parentCounter = 0;
+
+    Node actualNode(nodeCounter, this->map[initialPoints.first][initialPoints.second], initialPoints, nullptr);
+
+    vector<Node> vertexList;
+    vertexList.push_back(actualNode);
+
+    queue<Node> frontier;
     pair<int, int> adjVertice;
-    // Node *lastVertex;
 
     while (true)
     {
-        Node node(nodeCounter, this->map[actualVertice.first][actualVertice.second], actualVertice, &vertexList.at(nodeCounter));
-        graph[nodeCounter].push_back(node);
-        // previousNode = &node;
-        vertexList.push_back(node);
-        // lastVertex = &(graph[nodeCounter].at(0));
-
-        if (finalVertice.first == actualVertice.first && finalVertice.second == actualVertice.second)
+        cout << actualNode.getPoints().first << "," << actualNode.getPoints().second << "  ";
+        if (finalPoints.first == actualNode.getPoints().first && finalPoints.second == actualNode.getPoints().second)
         {
             break;
         }
 
-        if ((actualVertice.first > 0) && (actualVertice.first < numLines - 1))
+        if ((actualNode.getPoints().first > 0) && (actualNode.getPoints().first < numLines - 1))
         {
-            adjVertice = {actualVertice.first - 1, actualVertice.second};
+            adjVertice = {actualNode.getPoints().first - 1, actualNode.getPoints().second};
             if (!isVisited[adjVertice.first][adjVertice.second])
             {
-                frontier.push({adjVertice.first, adjVertice.second});
                 isVisited[adjVertice.first][adjVertice.second] = true;
-                Node node(nodeCounter, this->map[adjVertice.first][adjVertice.second], adjVertice, &vertexList.at(nodeCounter+1));
-                graph[nodeCounter].push_back(node);
+                Node node(++nodeCounter, this->map[adjVertice.first][adjVertice.second], adjVertice, &vertexList.at(parentCounter));
+                frontier.push(node);
+                vertexList.push_back(node);
             }
 
-            adjVertice = {actualVertice.first + 1, actualVertice.second};
+            adjVertice = {actualNode.getPoints().first + 1, actualNode.getPoints().second};
             if (!isVisited[adjVertice.first][adjVertice.second])
             {
-                frontier.push({adjVertice.first, adjVertice.second});
                 isVisited[adjVertice.first][adjVertice.second] = true;
-                Node node(nodeCounter, this->map[adjVertice.first][adjVertice.second], adjVertice, &vertexList.at(nodeCounter+1));
-                graph[nodeCounter].push_back(node);
+                Node node(++nodeCounter, this->map[adjVertice.first][adjVertice.second], adjVertice, &vertexList.at(parentCounter));
+                frontier.push(node);
+                vertexList.push_back(node);
             }
         }
-        if (actualVertice.first == 0)
+        if (actualNode.getPoints().first == 0)
         {
-            adjVertice = {actualVertice.first + 1, actualVertice.second};
+            adjVertice = {actualNode.getPoints().first + 1, actualNode.getPoints().second};
             if (!isVisited[adjVertice.first][adjVertice.second])
             {
-                frontier.push({adjVertice.first, adjVertice.second});
                 isVisited[adjVertice.first][adjVertice.second] = true;
-                Node node(nodeCounter, this->map[adjVertice.first][adjVertice.second], adjVertice, &vertexList.at(nodeCounter+1));
-                graph[nodeCounter].push_back(node);
+                Node node(++nodeCounter, this->map[adjVertice.first][adjVertice.second], adjVertice, &vertexList.at(parentCounter));
+                frontier.push(node);
+                vertexList.push_back(node);
             }
         }
-        if (actualVertice.first == numLines - 1)
+        if (actualNode.getPoints().first == numLines - 1)
         {
-            adjVertice = {actualVertice.first - 1, actualVertice.second};
+            adjVertice = {actualNode.getPoints().first - 1, actualNode.getPoints().second};
             if (!isVisited[adjVertice.first][adjVertice.second])
             {
-                frontier.push({adjVertice.first, adjVertice.second});
                 isVisited[adjVertice.first][adjVertice.second] = true;
-                Node node(nodeCounter, this->map[adjVertice.first][adjVertice.second], adjVertice, &vertexList.at(nodeCounter+1));
-                graph[nodeCounter].push_back(node);
-            }
-        }
-
-        if ((actualVertice.second > 0) && (actualVertice.second < numColumns - 1))
-        {
-            adjVertice = {actualVertice.first, actualVertice.second - 1};
-            if (!isVisited[adjVertice.first][adjVertice.second])
-            {
-                frontier.push({adjVertice.first, adjVertice.second});
-                isVisited[adjVertice.first][adjVertice.second] = true;
-                Node node(nodeCounter, this->map[adjVertice.first][adjVertice.second], adjVertice, &vertexList.at(nodeCounter+1));
-                graph[nodeCounter].push_back(node);
-            }
-
-            adjVertice = {actualVertice.first, actualVertice.second + 1};
-            if (!isVisited[adjVertice.first][adjVertice.second])
-            {
-                frontier.push({adjVertice.first, adjVertice.second});
-                isVisited[adjVertice.first][adjVertice.second] = true;
-                Node node(nodeCounter, this->map[adjVertice.first][adjVertice.second], adjVertice, &vertexList.at(nodeCounter+1));
-                graph[nodeCounter].push_back(node);
-            }
-        }
-        if (actualVertice.second == 0)
-        {
-            adjVertice = {actualVertice.first, actualVertice.second + 1};
-            if (!isVisited[adjVertice.first][adjVertice.second])
-            {
-                frontier.push({adjVertice.first, adjVertice.second});
-                isVisited[adjVertice.first][adjVertice.second] = true;
-                Node node(nodeCounter, this->map[adjVertice.first][adjVertice.second], adjVertice, &vertexList.at(nodeCounter+1));
-                graph[nodeCounter].push_back(node);
-            }
-        }
-        if (actualVertice.second == numColumns - 1)
-        {
-            adjVertice = {actualVertice.first, actualVertice.second - 1};
-            if (!isVisited[adjVertice.first][adjVertice.second])
-            {
-                frontier.push({adjVertice.first, adjVertice.second});
-                isVisited[adjVertice.first][adjVertice.second] = true;
-                Node node(nodeCounter, this->map[adjVertice.first][adjVertice.second], adjVertice, &vertexList.at(nodeCounter+1));
-                graph[nodeCounter].push_back(node);
+                Node node(++nodeCounter, this->map[adjVertice.first][adjVertice.second], adjVertice, &vertexList.at(parentCounter));
+                frontier.push(node);
+                vertexList.push_back(node);
             }
         }
 
-        nodeCounter++;
-        previousNodeCounter++;
-        actualVertice = frontier.front();
+        if ((actualNode.getPoints().second > 0) && (actualNode.getPoints().second < numColumns - 1))
+        {
+            adjVertice = {actualNode.getPoints().first, actualNode.getPoints().second - 1};
+            if (!isVisited[adjVertice.first][adjVertice.second])
+            {
+                isVisited[adjVertice.first][adjVertice.second] = true;
+                Node node(++nodeCounter, this->map[adjVertice.first][adjVertice.second], adjVertice, &vertexList.at(parentCounter));
+                frontier.push(node);
+                vertexList.push_back(node);
+            }
+
+            adjVertice = {actualNode.getPoints().first, actualNode.getPoints().second + 1};
+            if (!isVisited[adjVertice.first][adjVertice.second])
+            {
+                isVisited[adjVertice.first][adjVertice.second] = true;
+                Node node(++nodeCounter, this->map[adjVertice.first][adjVertice.second], adjVertice, &vertexList.at(parentCounter));
+                frontier.push(node);
+                vertexList.push_back(node);
+            }
+        }
+        if (actualNode.getPoints().second == 0)
+        {
+            adjVertice = {actualNode.getPoints().first, actualNode.getPoints().second + 1};
+            if (!isVisited[adjVertice.first][adjVertice.second])
+            {
+                isVisited[adjVertice.first][adjVertice.second] = true;
+                Node node(++nodeCounter, this->map[adjVertice.first][adjVertice.second], adjVertice, &vertexList.at(parentCounter));
+                frontier.push(node);
+                vertexList.push_back(node);
+            }
+        }
+        if (actualNode.getPoints().second == numColumns - 1)
+        {
+            adjVertice = {actualNode.getPoints().first, actualNode.getPoints().second - 1};
+            if (!isVisited[adjVertice.first][adjVertice.second])
+            {
+                isVisited[adjVertice.first][adjVertice.second] = true;
+                Node node(++nodeCounter, this->map[adjVertice.first][adjVertice.second], adjVertice, &vertexList.at(parentCounter));
+                frontier.push(node);
+                vertexList.push_back(node);
+            }
+        }
+
+        actualNode = frontier.front();
+        parentCounter = actualNode.getVertex();
         frontier.pop();
     }
+    cout << endl;
 
-    // printGraph(graph, numLines * numColumns);
-    // cout << lastVertex->getPreviousNode()->getPoints().first << "," << lastVertex->getPreviousNode()->getPoints().second << endl;
+    Node *aux;
+    for (int i = vertexList.size() - 1; i >= 0; i--)
+    {
+        if (vertexList.at(i).getPoints().first == finalPoints.first && vertexList.at(i).getPoints().second == finalPoints.second)
+        {
+            aux = &vertexList.at(i);
+            break;
+        }
+    }
 
-    // Fix the previous node logic
-    Node *aux = &vertexList.at(nodeCounter+1);
-    for (int i = nodeCounter; i >= 0; i--)
+    while (aux != nullptr)
     {
         cout << aux->getPoints().first << "," << aux->getPoints().second << "\t";
         aux = aux->getPreviousNode();

@@ -10,6 +10,7 @@
             "request": "launch",
             "program": "${workspaceRoot}/src/a.exe",
             "args": ["maps/test.map", "BFS", "1", "2", "1", "4"],
+            // "args": ["maps/floresta.map", "BFS", "13", "7", "90", "0"],
             "stopAtEntry": false,
             "cwd": "${workspaceFolder}",
             "externalConsole": true,

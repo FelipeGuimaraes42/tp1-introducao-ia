@@ -2,7 +2,7 @@
 
 Node::Node()
 {
-    this->vertex = -1;
+    this->vertex = 0;
     this->weight = 0;
     this->points = {-1, -1};
     this->previous = nullptr;
