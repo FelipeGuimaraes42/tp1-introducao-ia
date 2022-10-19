@@ -7,19 +7,6 @@ BFS::BFS(const vector<vector<float>> map)
 
 BFS::~BFS() {}
 
-void BFS::printGraph(vector<Node> adj[], int V)
-{
-    for (int d = 0; d < V; ++d)
-    {
-        cout << "\n Vertex " << d << ":";
-        for (auto x : adj[d])
-        {
-            cout << "-> " << x.getPoints().first << "," << x.getPoints().second;
-        }
-        cout << endl;
-    }
-}
-
 void BFS::getBFS(vector<string> initialPosition, int numLines, int numColumns)
 {
     pair<int, int> initialPoints = {stoi(initialPosition.at(0)), stoi(initialPosition.at(1))};
@@ -64,6 +51,7 @@ void BFS::getBFS(vector<string> initialPosition, int numLines, int numColumns)
 
     while (true)
     {
+        cout << actualNode.getPoints().first << "," << actualNode.getPoints().second << " ";
         if (finalPoints.first == actualNode.getPoints().first && finalPoints.second == actualNode.getPoints().second)
         {
             break;
@@ -159,6 +147,7 @@ void BFS::getBFS(vector<string> initialPosition, int numLines, int numColumns)
         parentCounter = actualNode.getVertex();
         frontier.pop();
     }
+    cout << endl;
 
     Node *aux;
     for (int i = vertexList.size() - 1; i >= 0; i--)

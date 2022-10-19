@@ -37,12 +37,12 @@ int main(int argc, char **argv)
     else if (option.compare("IDS") == 0)
     {
         IDS ids(map);
-        graph = ids.getIDS(positions, numLines, numColumns);
+        ids.getIDS(positions, numLines, numColumns);
     }
     else if (option.compare("UCS") == 0)
     {
         UCS ucs(map);
-        graph = ucs.getUCS(positions, numLines, numColumns);
+        ucs.getUCS(positions, numLines, numColumns);
     }
     else if (option.compare("Greedy") == 0)
     {

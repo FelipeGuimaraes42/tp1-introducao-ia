@@ -1,7 +1,8 @@
 #include <vector>
 #include <stack>
 #include <string>
-#include "Graph.hpp"
+#include <iostream>
+#include "Node.hpp"
 
 using namespace std;
 
@@ -9,8 +10,9 @@ class IDS
 {
 private:
     vector<vector<float>> map;
+
 public:
     IDS(const vector<vector<float>> map);
     ~IDS();
-    Graph getIDS(vector<string> initialPosition, int numLines, int numColumns);
+    void getIDS(vector<string> initialPosition, int numLines, int numColumns);
 };
