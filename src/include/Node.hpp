@@ -23,6 +23,7 @@ public:
     Node *getPreviousNode();
     int getVertex();
     pair<int, int> getPoints();
+    float getWeight();
 };
 
 #endif

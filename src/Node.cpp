@@ -44,3 +44,8 @@ pair<int, int> Node::getPoints()
 {
     return this->points;
 }
+
+float Node::getWeight()
+{
+    return this->weight;
+}
