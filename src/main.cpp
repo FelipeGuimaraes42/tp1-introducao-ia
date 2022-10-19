@@ -2,7 +2,6 @@
 #include <string>
 #include <vector>
 #include "include/InputFile.hpp"
-#include "include/Graph.hpp"
 #include "include/BFS.hpp"
 #include "include/IDS.hpp"
 #include "include/UCS.hpp"
@@ -27,8 +26,6 @@ int main(int argc, char **argv)
         positions.push_back(argv[i + 3]);
     }
 
-    Graph graph;
-
     if (option.compare("BFS") == 0)
     {
         BFS bfs(map);
@@ -47,12 +44,12 @@ int main(int argc, char **argv)
     else if (option.compare("Greedy") == 0)
     {
         Greedy greedy(map);
-        graph = greedy.getGreedy(positions, numLines, numColumns);
+        greedy.getGreedy(positions, numLines, numColumns);
     }
     else if (option.compare("Astar") == 0)
     {
         AStar aStar(map);
-        graph = aStar.getAStar(positions, numLines, numColumns);
+        aStar.getAStar(positions, numLines, numColumns);
     }
     else
     {
@@ -60,9 +57,5 @@ int main(int argc, char **argv)
         cout << "Try again with a valid option." << endl;
         exit(1);
     }
-
-    // graph.printGraph();
-    // graph.printGraphV2(5);
-
     return 0;
 }

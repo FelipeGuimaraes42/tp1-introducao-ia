@@ -47,9 +47,8 @@ vector<vector<double>> Greedy::calculateEuclideanDistance(const pair<int, int> f
     return distances;
 }
 
-Graph Greedy::getGreedy(vector<string> initialPosition, int numLines, int numColumns)
+void Greedy::getGreedy(vector<string> initialPosition, int numLines, int numColumns)
 {
-    Graph solution(numLines * numColumns);
     pair<int, int> initialVertice = {stoi(initialPosition.at(0)), stoi(initialPosition.at(1))};
     pair<int, int> finalVertice = {stoi(initialPosition.at(2)), stoi(initialPosition.at(3))};
     bool isVisited[numLines][numColumns];
@@ -185,6 +184,4 @@ Graph Greedy::getGreedy(vector<string> initialPosition, int numLines, int numCol
     }
 
     cout << "Result:" << result << endl;
-
-    return solution;
 }

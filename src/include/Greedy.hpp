@@ -3,7 +3,7 @@
 #include <string>
 #include <iostream>
 #include <cmath>
-#include "Graph.hpp"
+#include "Node.hpp"
 
 using namespace std;
 
@@ -17,5 +17,5 @@ private:
 public:
     Greedy(vector<vector<float>> map);
     ~Greedy();
-    Graph getGreedy(vector<string> initialPosition, int numLines, int numColumns);
+    void getGreedy(vector<string> initialPosition, int numLines, int numColumns);
 };

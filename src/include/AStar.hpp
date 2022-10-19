@@ -1,7 +1,7 @@
 #include <vector>
 #include <iostream>
 #include <cmath>
-#include "Graph.hpp"
+#include "Node.hpp"
 
 class AStar
 {
@@ -12,5 +12,5 @@ private:
 public:
     AStar(const vector<vector<float>> map);
     ~AStar();
-    Graph getAStar(vector<string> initialPosition, int numLines, int numColumns);
+    void getAStar(vector<string> initialPosition, int numLines, int numColumns);
 };

@@ -71,12 +71,14 @@ void UCS::getUCS(vector<string> initialPosition, int numLines, int numColumns)
 
     list<Node> frontier;
     pair<int, int> adjVertice;
+    Node *lastVertex;
 
     while (true)
     {
         if (finalPoints.first == actualNode.getPoints().first && finalPoints.second == actualNode.getPoints().second)
         {
             break;
+            lastVertex = &vertexList.at(actualNode.getVertex());
         }
         isVisited[actualNode.getPoints().first][actualNode.getPoints().second] = true;
 
@@ -212,4 +214,50 @@ void UCS::getUCS(vector<string> initialPosition, int numLines, int numColumns)
     }
 
     cout << weights[actualNode.getPoints().first][actualNode.getPoints().second] << endl;
+
+    Node *aux;
+    for (int i = vertexList.size() - 1; i >= 0; i--)
+    {
+        if (vertexList.at(i).getPoints().first == finalPoints.first && vertexList.at(i).getPoints().second == finalPoints.second)
+        {
+            aux = &vertexList.at(i);
+            break;
+        }
+    }
+
+    vector<pair<int, int>> responsePoints;
+    float responseWeight = 0.0;
+    while (aux != nullptr)
+    {
+        responsePoints.push_back(aux->getPoints());
+        responseWeight += aux->getWeight();
+        aux = aux->getPreviousNode();
+    }
+    responseWeight -= this->map[initialPoints.first][initialPoints.second];
+
+    cout << responseWeight << " ";
+
+    for (int i = responsePoints.size() - 1; i >= 0; i--)
+    {
+        cout << "(" << responsePoints.at(i).first << "," << responsePoints.at(i).second << ") ";
+    }
+    cout << endl;
+
+    // vector<pair<int, int>> responsePoints;
+    // float responseWeight = 0.0;
+    // while (lastVertex != nullptr)
+    // {
+    //     responsePoints.push_back(lastVertex->getPoints());
+    //     responseWeight += lastVertex->getWeight();
+    //     lastVertex = lastVertex->getPreviousNode();
+    // }
+    // responseWeight -= this->map[initialPoints.first][initialPoints.second];
+
+    // cout << responseWeight << " ";
+
+    // for (int i = responsePoints.size() - 1; i >= 0; i--)
+    // {
+    //     cout << "(" << responsePoints.at(i).first << "," << responsePoints.at(i).second << ") ";
+    // }
+    // cout << endl;
 }

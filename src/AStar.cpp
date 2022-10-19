@@ -29,9 +29,8 @@ vector<vector<double>> AStar::calculateEuclideanDistance(const pair<int, int> fi
     return distances;
 }
 
-Graph AStar::getAStar(vector<string> initialPosition, int numLines, int numColumns)
+void AStar::getAStar(vector<string> initialPosition, int numLines, int numColumns)
 {
-    Graph solution(numLines * numColumns);
     pair<int, int> initialVertice = {stoi(initialPosition.at(0)), stoi(initialPosition.at(1))};
     pair<int, int> finalVertice = {stoi(initialPosition.at(2)), stoi(initialPosition.at(3))};
     bool isVisited[numLines][numColumns];
@@ -165,6 +164,4 @@ Graph AStar::getAStar(vector<string> initialPosition, int numLines, int numColum
     }
 
     cout << "Result:" << result << endl;
-
-    return solution;
 }
