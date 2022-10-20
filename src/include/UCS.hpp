@@ -4,8 +4,6 @@
 #include <iostream>
 #include "Node.hpp"
 
-#define INF 0x3f3f3f3f
-
 using namespace std;
 
 class UCS

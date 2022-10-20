@@ -1,5 +1,5 @@
 #include <vector>
-#include <queue>
+#include <list>
 #include <string>
 #include <iostream>
 #include <cmath>
@@ -13,6 +13,7 @@ private:
     vector<vector<float>> map;
     vector<vector<int>> calculateManhattanDistances(pair<int, int> finalPosition, int numLines, int numColumns);
     vector<vector<double>> calculateEuclideanDistance(pair<int, int> finalPosition, int numLines, int numColumns);
+    void addToPriorityQueue(list<Node> &list, Node vertex);
 
 public:
     Greedy(vector<vector<float>> map);

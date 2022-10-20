@@ -213,7 +213,7 @@ void UCS::getUCS(vector<string> initialPosition, int numLines, int numColumns)
         frontier.pop_front();
     }
 
-    cout << weights[actualNode.getPoints().first][actualNode.getPoints().second] << endl;
+    // cout << weights[actualNode.getPoints().first][actualNode.getPoints().second] << endl;
 
     Node *aux;
     for (int i = vertexList.size() - 1; i >= 0; i--)
