@@ -10,6 +10,7 @@ class IDS
 {
 private:
     vector<vector<float>> map;
+    bool isValidDepth(pair<int, int> initialPoints, pair<int, int> nextPoints, int actualMaxDepth);
 
 public:
     IDS(const vector<vector<float>> map);

@@ -7,6 +7,16 @@ IDS::IDS(const vector<vector<float>> map)
 
 IDS::~IDS() {}
 
+bool IDS::isValidDepth(pair<int, int> initialPoints, pair<int, int> nextPoint, int actualMaxDepths)
+{
+    // We will use "depth" as column number, but as the graph is a grid, I think it doesn't matter
+    if (abs(initialPoints.second - nextPoint.second) > actualMaxDepths)
+    {
+        return false;
+    }
+    return true;
+}
+
 void IDS::getIDS(vector<string> initialPosition, int numLines, int numColumns)
 {
 
@@ -20,135 +30,152 @@ void IDS::getIDS(vector<string> initialPosition, int numLines, int numColumns)
 
     bool isVisited[numLines][numColumns];
 
-    for (int i = 0; i < numLines; i++)
-    {
-        for (int j = 0; j < numColumns; j++)
-        {
-            if (this->map[i][j] > 6.0)
-            {
-                isVisited[i][j] = true;
-            }
-            else
-            {
-                isVisited[i][j] = false;
-            }
-        }
-    }
-
-    isVisited[initialPoints.first][initialPoints.second] = true;
-
-    int nodeCounter = 0;
-    int parentCounter = 1;
-
-    Node actualNode(nodeCounter, this->map[initialPoints.first][initialPoints.second], initialPoints, nullptr);
+    int nodeCounter;
+    int parentCounter;
 
     vector<Node> vertexList;
-    vertexList.push_back(actualNode);
-    nodeCounter++;
-    vertexList.push_back(actualNode);
 
-    stack<Node> frontier;
-    pair<int, int> adjVertice;
+    int depth = 0;
+    bool foundSolution = false;
 
-    while (true)
+    while (!foundSolution)
     {
-        cout << actualNode.getPoints().first << "," << actualNode.getPoints().second << " ";
-        if (finalPoints.first == actualNode.getPoints().first && finalPoints.second == actualNode.getPoints().second)
-        {
-            break;
-        }
+        depth++;
 
-        if ((actualNode.getPoints().first > 0) && (actualNode.getPoints().first < numLines - 1))
+        for (int i = 0; i < numLines; i++)
         {
-            adjVertice = {actualNode.getPoints().first - 1, actualNode.getPoints().second};
-            if (!isVisited[adjVertice.first][adjVertice.second])
+            for (int j = 0; j < numColumns; j++)
             {
-                isVisited[adjVertice.first][adjVertice.second] = true;
-                Node node(++nodeCounter, this->map[adjVertice.first][adjVertice.second], adjVertice, &vertexList.at(parentCounter));
-                frontier.push(node);
-                vertexList.push_back(node);
+                if (this->map[i][j] > 6.0)
+                {
+                    isVisited[i][j] = true;
+                }
+                else
+                {
+                    isVisited[i][j] = false;
+                }
             }
+        }
+        nodeCounter = 0;
+        parentCounter = 1;
 
-            adjVertice = {actualNode.getPoints().first + 1, actualNode.getPoints().second};
-            if (!isVisited[adjVertice.first][adjVertice.second])
-            {
-                isVisited[adjVertice.first][adjVertice.second] = true;
-                Node node(++nodeCounter, this->map[adjVertice.first][adjVertice.second], adjVertice, &vertexList.at(parentCounter));
-                frontier.push(node);
-                vertexList.push_back(node);
-            }
-        }
-        if (actualNode.getPoints().first == 0)
-        {
-            adjVertice = {actualNode.getPoints().first + 1, actualNode.getPoints().second};
-            if (!isVisited[adjVertice.first][adjVertice.second])
-            {
-                isVisited[adjVertice.first][adjVertice.second] = true;
-                Node node(++nodeCounter, this->map[adjVertice.first][adjVertice.second], adjVertice, &vertexList.at(parentCounter));
-                frontier.push(node);
-                vertexList.push_back(node);
-            }
-        }
-        if (actualNode.getPoints().first == numLines - 1)
-        {
-            adjVertice = {actualNode.getPoints().first - 1, actualNode.getPoints().second};
-            if (!isVisited[adjVertice.first][adjVertice.second])
-            {
-                isVisited[adjVertice.first][adjVertice.second] = true;
-                Node node(++nodeCounter, this->map[adjVertice.first][adjVertice.second], adjVertice, &vertexList.at(parentCounter));
-                frontier.push(node);
-                vertexList.push_back(node);
-            }
-        }
+        isVisited[initialPoints.first][initialPoints.second] = true;
 
-        if ((actualNode.getPoints().second > 0) && (actualNode.getPoints().second < numColumns - 1))
+        Node actualNode(nodeCounter, this->map[initialPoints.first][initialPoints.second], initialPoints, nullptr);
+        vertexList.clear();
+        vertexList.push_back(actualNode);
+        nodeCounter++;
+        vertexList.push_back(actualNode);
+
+        stack<Node> frontier;
+        pair<int, int> adjVertice;
+
+        while (true)
         {
-            adjVertice = {actualNode.getPoints().first, actualNode.getPoints().second - 1};
-            if (!isVisited[adjVertice.first][adjVertice.second])
+            cout << actualNode.getPoints().first << "," << actualNode.getPoints().second << " ";
+            if (finalPoints.first == actualNode.getPoints().first && finalPoints.second == actualNode.getPoints().second)
             {
-                isVisited[adjVertice.first][adjVertice.second] = true;
-                Node node(++nodeCounter, this->map[adjVertice.first][adjVertice.second], adjVertice, &vertexList.at(parentCounter));
-                frontier.push(node);
-                vertexList.push_back(node);
+                foundSolution = true;
+                break;
             }
 
-            adjVertice = {actualNode.getPoints().first, actualNode.getPoints().second + 1};
-            if (!isVisited[adjVertice.first][adjVertice.second])
+            if ((actualNode.getPoints().first > 0) && (actualNode.getPoints().first < numLines - 1))
             {
-                isVisited[adjVertice.first][adjVertice.second] = true;
-                Node node(++nodeCounter, this->map[adjVertice.first][adjVertice.second], adjVertice, &vertexList.at(parentCounter));
-                frontier.push(node);
-                vertexList.push_back(node);
-            }
-        }
-        if (actualNode.getPoints().second == 0)
-        {
-            adjVertice = {actualNode.getPoints().first, actualNode.getPoints().second + 1};
-            if (!isVisited[adjVertice.first][adjVertice.second])
-            {
-                isVisited[adjVertice.first][adjVertice.second] = true;
-                Node node(++nodeCounter, this->map[adjVertice.first][adjVertice.second], adjVertice, &vertexList.at(parentCounter));
-                frontier.push(node);
-                vertexList.push_back(node);
-            }
-        }
-        if (actualNode.getPoints().second == numColumns - 1)
-        {
-            adjVertice = {actualNode.getPoints().first, actualNode.getPoints().second - 1};
-            if (!isVisited[adjVertice.first][adjVertice.second])
-            {
-                isVisited[adjVertice.first][adjVertice.second] = true;
-                Node node(++nodeCounter, this->map[adjVertice.first][adjVertice.second], adjVertice, &vertexList.at(parentCounter));
-                frontier.push(node);
-                vertexList.push_back(node);
-            }
-        }
+                adjVertice = {actualNode.getPoints().first - 1, actualNode.getPoints().second};
+                if (!isVisited[adjVertice.first][adjVertice.second] && this->isValidDepth(initialPoints, adjVertice, depth))
+                {
+                    isVisited[adjVertice.first][adjVertice.second] = true;
+                    Node node(++nodeCounter, this->map[adjVertice.first][adjVertice.second], adjVertice, &vertexList.at(parentCounter));
+                    frontier.push(node);
+                    vertexList.push_back(node);
+                }
 
-        actualNode = frontier.top();
-        parentCounter = actualNode.getVertex();
-        frontier.pop();
+                adjVertice = {actualNode.getPoints().first + 1, actualNode.getPoints().second};
+                if (!isVisited[adjVertice.first][adjVertice.second] && this->isValidDepth(initialPoints, adjVertice, depth))
+                {
+                    isVisited[adjVertice.first][adjVertice.second] = true;
+                    Node node(++nodeCounter, this->map[adjVertice.first][adjVertice.second], adjVertice, &vertexList.at(parentCounter));
+                    frontier.push(node);
+                    vertexList.push_back(node);
+                }
+            }
+            if (actualNode.getPoints().first == 0)
+            {
+                adjVertice = {actualNode.getPoints().first + 1, actualNode.getPoints().second};
+                if (!isVisited[adjVertice.first][adjVertice.second] && this->isValidDepth(initialPoints, adjVertice, depth))
+                {
+                    isVisited[adjVertice.first][adjVertice.second] = true;
+                    Node node(++nodeCounter, this->map[adjVertice.first][adjVertice.second], adjVertice, &vertexList.at(parentCounter));
+                    frontier.push(node);
+                    vertexList.push_back(node);
+                }
+            }
+            if (actualNode.getPoints().first == numLines - 1)
+            {
+                adjVertice = {actualNode.getPoints().first - 1, actualNode.getPoints().second};
+                if (!isVisited[adjVertice.first][adjVertice.second] && this->isValidDepth(initialPoints, adjVertice, depth))
+                {
+                    isVisited[adjVertice.first][adjVertice.second] = true;
+                    Node node(++nodeCounter, this->map[adjVertice.first][adjVertice.second], adjVertice, &vertexList.at(parentCounter));
+                    frontier.push(node);
+                    vertexList.push_back(node);
+                }
+            }
+
+            if ((actualNode.getPoints().second > 0) && (actualNode.getPoints().second < numColumns - 1))
+            {
+                adjVertice = {actualNode.getPoints().first, actualNode.getPoints().second - 1};
+                if (!isVisited[adjVertice.first][adjVertice.second] && this->isValidDepth(initialPoints, adjVertice, depth))
+                {
+                    isVisited[adjVertice.first][adjVertice.second] = true;
+                    Node node(++nodeCounter, this->map[adjVertice.first][adjVertice.second], adjVertice, &vertexList.at(parentCounter));
+                    frontier.push(node);
+                    vertexList.push_back(node);
+                }
+
+                adjVertice = {actualNode.getPoints().first, actualNode.getPoints().second + 1};
+                if (!isVisited[adjVertice.first][adjVertice.second] && this->isValidDepth(initialPoints, adjVertice, depth))
+                {
+                    isVisited[adjVertice.first][adjVertice.second] = true;
+                    Node node(++nodeCounter, this->map[adjVertice.first][adjVertice.second], adjVertice, &vertexList.at(parentCounter));
+                    frontier.push(node);
+                    vertexList.push_back(node);
+                }
+            }
+            if (actualNode.getPoints().second == 0)
+            {
+                adjVertice = {actualNode.getPoints().first, actualNode.getPoints().second + 1};
+                if (!isVisited[adjVertice.first][adjVertice.second] && this->isValidDepth(initialPoints, adjVertice, depth))
+                {
+                    isVisited[adjVertice.first][adjVertice.second] = true;
+                    Node node(++nodeCounter, this->map[adjVertice.first][adjVertice.second], adjVertice, &vertexList.at(parentCounter));
+                    frontier.push(node);
+                    vertexList.push_back(node);
+                }
+            }
+            if (actualNode.getPoints().second == numColumns - 1)
+            {
+                adjVertice = {actualNode.getPoints().first, actualNode.getPoints().second - 1};
+                if (!isVisited[adjVertice.first][adjVertice.second] && this->isValidDepth(initialPoints, adjVertice, depth))
+                {
+                    isVisited[adjVertice.first][adjVertice.second] = true;
+                    Node node(++nodeCounter, this->map[adjVertice.first][adjVertice.second], adjVertice, &vertexList.at(parentCounter));
+                    frontier.push(node);
+                    vertexList.push_back(node);
+                }
+            }
+
+            if (frontier.empty())
+            {
+                break;
+            }
+
+            actualNode = frontier.top();
+            parentCounter = actualNode.getVertex();
+            frontier.pop();
+        }
+        cout << endl;
     }
-    cout << endl;
 
     Node *aux;
     for (int i = vertexList.size() - 1; i >= 0; i--)
