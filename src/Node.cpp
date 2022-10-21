@@ -2,18 +2,9 @@
 
 Node::Node()
 {
-    this->vertex = 0;
     this->weight = 0;
+    this->accumulatedWeight = 0;
     this->points = {-1, -1};
-    this->previousNode = nullptr;
-}
-
-Node::Node(const int vertex, const float weight, const pair<int, int> points, Node *previous)
-{
-    this->vertex = vertex;
-    this->weight = weight;
-    this->points = points;
-    this->previousNode = previous;
 }
 
 Node::Node(const float weight, const pair<int, int> points, vector<pair<int, int>> previousPoints, float accumulatedWeight)
@@ -25,16 +16,6 @@ Node::Node(const float weight, const pair<int, int> points, vector<pair<int, int
 }
 
 Node::~Node() {}
-
-Node *Node::getPreviousNode()
-{
-    return this->previousNode;
-}
-
-int Node::getVertex()
-{
-    return this->vertex;
-}
 
 pair<int, int> Node::getPoints()
 {

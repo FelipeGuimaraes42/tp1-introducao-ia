@@ -32,6 +32,7 @@ void UCS::getUCS(vector<string> initialPosition, int numLines, int numColumns)
 {
     pair<int, int> initialPoints = {stoi(initialPosition.at(0)), stoi(initialPosition.at(1))};
     pair<int, int> finalPoints = {stoi(initialPosition.at(2)), stoi(initialPosition.at(3))};
+
     if (this->map[finalPoints.first][finalPoints.second] > 6.0 || this->map[initialPoints.first][initialPoints.second] > 6.0)
     {
         cout << "Unreachable. Try another vertice." << endl;
@@ -60,26 +61,24 @@ void UCS::getUCS(vector<string> initialPosition, int numLines, int numColumns)
     }
     weights[initialPoints.first][initialPoints.second] = 0;
 
-    int nodeCounter = 0;
-    int parentCounter = 1;
-    Node actualNode(nodeCounter, this->map[initialPoints.first][initialPoints.second], initialPoints, nullptr);
-
-    vector<Node> vertexList;
-    vertexList.push_back(actualNode);
-    nodeCounter++;
-    vertexList.push_back(actualNode);
+    vector<pair<int, int>> headPoints;
+    headPoints.push_back({-1, -1});
+    Node actualNode(this->map[initialPoints.first][initialPoints.second], initialPoints, headPoints, 0);
 
     list<Node> frontier;
     pair<int, int> adjVertice;
-    Node *lastVertex;
 
     while (true)
     {
+        vector<pair<int, int>> previous = actualNode.getPreviousPoints();
+        previous.push_back(actualNode.getPoints());
+        actualNode.setPreviousPoints(previous);
+
         if (finalPoints.first == actualNode.getPoints().first && finalPoints.second == actualNode.getPoints().second)
         {
             break;
-            lastVertex = &vertexList.at(actualNode.getVertex());
         }
+
         isVisited[actualNode.getPoints().first][actualNode.getPoints().second] = true;
 
         float acumulatedDistance = weights[actualNode.getPoints().first][actualNode.getPoints().second];
@@ -93,8 +92,10 @@ void UCS::getUCS(vector<string> initialPosition, int numLines, int numColumns)
                 if (weights[adjVertice.first][adjVertice.second] > aux)
                 {
                     weights[adjVertice.first][adjVertice.second] = aux;
-                    Node node(++nodeCounter, this->map[adjVertice.first][adjVertice.second], adjVertice, &vertexList.at(parentCounter));
-                    vertexList.push_back(node);
+
+                    float accumulatedWeight = actualNode.getAccumulatedWeight() + this->map[adjVertice.first][adjVertice.second];
+                    Node node(this->map[adjVertice.first][adjVertice.second], adjVertice, actualNode.getPreviousPoints(), accumulatedWeight);
+
                     addToPriorityQueue(frontier, weights, node);
                 }
             }
@@ -106,8 +107,10 @@ void UCS::getUCS(vector<string> initialPosition, int numLines, int numColumns)
                 if (weights[adjVertice.first][adjVertice.second] > aux)
                 {
                     weights[adjVertice.first][adjVertice.second] = aux;
-                    Node node(++nodeCounter, this->map[adjVertice.first][adjVertice.second], adjVertice, &vertexList.at(parentCounter));
-                    vertexList.push_back(node);
+
+                    float accumulatedWeight = actualNode.getAccumulatedWeight() + this->map[adjVertice.first][adjVertice.second];
+                    Node node(this->map[adjVertice.first][adjVertice.second], adjVertice, actualNode.getPreviousPoints(), accumulatedWeight);
+
                     addToPriorityQueue(frontier, weights, node);
                 }
             }
@@ -121,8 +124,10 @@ void UCS::getUCS(vector<string> initialPosition, int numLines, int numColumns)
                 if (weights[adjVertice.first][adjVertice.second] > aux)
                 {
                     weights[adjVertice.first][adjVertice.second] = aux;
-                    Node node(++nodeCounter, this->map[adjVertice.first][adjVertice.second], adjVertice, &vertexList.at(parentCounter));
-                    vertexList.push_back(node);
+
+                    float accumulatedWeight = actualNode.getAccumulatedWeight() + this->map[adjVertice.first][adjVertice.second];
+                    Node node(this->map[adjVertice.first][adjVertice.second], adjVertice, actualNode.getPreviousPoints(), accumulatedWeight);
+
                     addToPriorityQueue(frontier, weights, node);
                 }
             }
@@ -136,8 +141,10 @@ void UCS::getUCS(vector<string> initialPosition, int numLines, int numColumns)
                 if (weights[adjVertice.first][adjVertice.second] > aux)
                 {
                     weights[adjVertice.first][adjVertice.second] = aux;
-                    Node node(++nodeCounter, this->map[adjVertice.first][adjVertice.second], adjVertice, &vertexList.at(parentCounter));
-                    vertexList.push_back(node);
+
+                    float accumulatedWeight = actualNode.getAccumulatedWeight() + this->map[adjVertice.first][adjVertice.second];
+                    Node node(this->map[adjVertice.first][adjVertice.second], adjVertice, actualNode.getPreviousPoints(), accumulatedWeight);
+
                     addToPriorityQueue(frontier, weights, node);
                 }
             }
@@ -152,8 +159,10 @@ void UCS::getUCS(vector<string> initialPosition, int numLines, int numColumns)
                 if (weights[adjVertice.first][adjVertice.second] > aux)
                 {
                     weights[adjVertice.first][adjVertice.second] = aux;
-                    Node node(++nodeCounter, this->map[adjVertice.first][adjVertice.second], adjVertice, &vertexList.at(parentCounter));
-                    vertexList.push_back(node);
+
+                    float accumulatedWeight = actualNode.getAccumulatedWeight() + this->map[adjVertice.first][adjVertice.second];
+                    Node node(this->map[adjVertice.first][adjVertice.second], adjVertice, actualNode.getPreviousPoints(), accumulatedWeight);
+
                     addToPriorityQueue(frontier, weights, node);
                 }
             }
@@ -165,8 +174,10 @@ void UCS::getUCS(vector<string> initialPosition, int numLines, int numColumns)
                 if (weights[adjVertice.first][adjVertice.second] > aux)
                 {
                     weights[adjVertice.first][adjVertice.second] = aux;
-                    Node node(++nodeCounter, this->map[adjVertice.first][adjVertice.second], adjVertice, &vertexList.at(parentCounter));
-                    vertexList.push_back(node);
+
+                    float accumulatedWeight = actualNode.getAccumulatedWeight() + this->map[adjVertice.first][adjVertice.second];
+                    Node node(this->map[adjVertice.first][adjVertice.second], adjVertice, actualNode.getPreviousPoints(), accumulatedWeight);
+
                     addToPriorityQueue(frontier, weights, node);
                 }
             }
@@ -180,8 +191,10 @@ void UCS::getUCS(vector<string> initialPosition, int numLines, int numColumns)
                 if (weights[adjVertice.first][adjVertice.second] > aux)
                 {
                     weights[adjVertice.first][adjVertice.second] = aux;
-                    Node node(++nodeCounter, this->map[adjVertice.first][adjVertice.second], adjVertice, &vertexList.at(parentCounter));
-                    vertexList.push_back(node);
+
+                    float accumulatedWeight = actualNode.getAccumulatedWeight() + this->map[adjVertice.first][adjVertice.second];
+                    Node node(this->map[adjVertice.first][adjVertice.second], adjVertice, actualNode.getPreviousPoints(), accumulatedWeight);
+
                     addToPriorityQueue(frontier, weights, node);
                 }
             }
@@ -195,8 +208,10 @@ void UCS::getUCS(vector<string> initialPosition, int numLines, int numColumns)
                 if (weights[adjVertice.first][adjVertice.second] > aux)
                 {
                     weights[adjVertice.first][adjVertice.second] = aux;
-                    Node node(++nodeCounter, this->map[adjVertice.first][adjVertice.second], adjVertice, &vertexList.at(parentCounter));
-                    vertexList.push_back(node);
+
+                    float accumulatedWeight = actualNode.getAccumulatedWeight() + this->map[adjVertice.first][adjVertice.second];
+                    Node node(this->map[adjVertice.first][adjVertice.second], adjVertice, actualNode.getPreviousPoints(), accumulatedWeight);
+
                     addToPriorityQueue(frontier, weights, node);
                 }
             }
@@ -209,55 +224,14 @@ void UCS::getUCS(vector<string> initialPosition, int numLines, int numColumns)
         }
 
         actualNode = frontier.front();
-        parentCounter = actualNode.getVertex();
         frontier.pop_front();
     }
 
-    // cout << weights[actualNode.getPoints().first][actualNode.getPoints().second] << endl;
-
-    Node *aux;
-    for (int i = vertexList.size() - 1; i >= 0; i--)
+    cout << actualNode.getAccumulatedWeight() << " ";
+    for (int i = 1; i < actualNode.getPreviousPoints().size(); i++)
     {
-        if (vertexList.at(i).getPoints().first == finalPoints.first && vertexList.at(i).getPoints().second == finalPoints.second)
-        {
-            aux = &vertexList.at(i);
-            break;
-        }
-    }
-
-    vector<pair<int, int>> responsePoints;
-    float responseWeight = 0.0;
-    while (aux != nullptr)
-    {
-        responsePoints.push_back(aux->getPoints());
-        responseWeight += aux->getWeight();
-        aux = aux->getPreviousNode();
-    }
-    responseWeight -= this->map[initialPoints.first][initialPoints.second];
-
-    cout << responseWeight << " ";
-
-    for (int i = responsePoints.size() - 1; i >= 0; i--)
-    {
-        cout << "(" << responsePoints.at(i).first << "," << responsePoints.at(i).second << ") ";
+        pair<int, int> aux = actualNode.getPreviousPoints().at(i);
+        cout << "(" << aux.first << "," << aux.second << ") ";
     }
     cout << endl;
-
-    // vector<pair<int, int>> responsePoints;
-    // float responseWeight = 0.0;
-    // while (lastVertex != nullptr)
-    // {
-    //     responsePoints.push_back(lastVertex->getPoints());
-    //     responseWeight += lastVertex->getWeight();
-    //     lastVertex = lastVertex->getPreviousNode();
-    // }
-    // responseWeight -= this->map[initialPoints.first][initialPoints.second];
-
-    // cout << responseWeight << " ";
-
-    // for (int i = responsePoints.size() - 1; i >= 0; i--)
-    // {
-    //     cout << "(" << responsePoints.at(i).first << "," << responsePoints.at(i).second << ") ";
-    // }
-    // cout << endl;
 }
