@@ -45,19 +45,19 @@ Pode-se usar comandos do Makefile a partir da root do projeto para compilar e ex
     - *make ucsTest* 
     - *make greedyTest* 
     - *make astarTest*
-- Pode-se rodar os testes de saída para floresta e cidade com os comandos, substituindo x por números entre 1-4:
+- Pode-se rodar os testes de saída para floresta e cidade com os seguintes comandos, substituindo x por números entre 1-4:
     - Floresta:
-        - *bfsForestx*
-        - *idsForestx*
-        - *ucsForestx*
-        - *greedyForestx*
-        - *astarForestx*
+        - make *bfsForestx*
+        - make *idsForestx*
+        - make *ucsForestx*
+        - make *greedyForestx*
+        - make *astarForestx*
     - Cidade:
-        - *bfsCityx*
-        - *idsCityx*
-        - *ucsCityx*
-        - *greedyCityx*
-        - *astarCityx*
+        - make *bfsCityx*
+        - make *idsCityx*
+        - make *ucsCityx*
+        - make *greedyCityx*
+        - make *astarCityx*
 
 ## Saída
 A saída do programa é dada da seguinte forma:
