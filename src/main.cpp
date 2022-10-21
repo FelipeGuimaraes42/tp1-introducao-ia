@@ -53,9 +53,9 @@ int main(int argc, char **argv)
     }
     else
     {
-        cout << "Invalid Algorithm Option!" << endl;
+        cout << "Invalid Algorithm Option!" << "\n";
         cout << "Try again with a valid option." << endl;
-        exit(1);
+        exit(0);
     }
     return 0;
 }

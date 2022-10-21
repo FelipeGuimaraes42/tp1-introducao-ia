@@ -17,10 +17,8 @@ vector<vector<int>> Greedy::calculateManhattanDistances(const pair<int, int> fin
         {
             float distance = abs(x - finalPosition.first) + abs(y - finalPosition.second);
             aux.push_back(distance);
-            // cout << distance << "\t";
         }
         distances.push_back(aux);
-        // cout << endl;
     }
 
     return distances;
@@ -38,16 +36,14 @@ vector<vector<double>> Greedy::calculateEuclideanDistance(const pair<int, int> f
             double yd = finalPosition.second - y;
             double distance = sqrt(xd * xd + yd * yd);
             aux.push_back(distance);
-            // cout << distance << "\t";
         }
         distances.push_back(aux);
-        // cout << endl;
     }
 
     return distances;
 }
 
-void Greedy::addToPriorityQueue(list<Node> &frontier, Node vertex)
+void Greedy::addToPriorityQueue(list<Node> &frontier, Node &vertex)
 {
     bool isPushBack = true;
     if (!frontier.empty())
@@ -100,27 +96,25 @@ void Greedy::getGreedy(vector<string> initialPosition, int numLines, int numColu
         weights.push_back(aux);
     }
 
-    // vector<vector<int>> heuristicValue = this->calculateManhattanDistances(finalVertice, numLines, numColumns);
     const vector<vector<double>> heuristicValue = this->calculateEuclideanDistance(finalPoints, numLines, numColumns);
     double result = 0;
 
-    int nodeCounter = 0;
-    int parentCounter = 0;
-    Node actualNode(nodeCounter, this->map[initialPoints.first][initialPoints.second], initialPoints, nullptr);
-
-    vector<Node> vertexList;
-    vertexList.push_back(actualNode);
+    vector<pair<int, int>> headPoints;
+    headPoints.push_back({-1, -1});
+    Node actualNode(this->map[initialPoints.first][initialPoints.second], initialPoints, headPoints, 0);
 
     list<Node> frontier;
     pair<int, int> adjVertice;
-    Node *lastVertex;
 
     while (true)
     {
+        vector<pair<int, int>> previous = actualNode.getPreviousPoints();
+        previous.push_back(actualNode.getPoints());
+        actualNode.setPreviousPoints(previous);
+
         if (finalPoints.first == actualNode.getPoints().first && finalPoints.second == actualNode.getPoints().second)
         {
             break;
-            lastVertex = &vertexList.at(actualNode.getVertex());
         }
 
         vector<Node> actualNodeFrontier;
@@ -133,10 +127,11 @@ void Greedy::getGreedy(vector<string> initialPosition, int numLines, int numColu
             {
                 float aux = this->map[adjVertice.first][adjVertice.second] + result;
                 weights[adjVertice.first][adjVertice.second] = aux;
-                Node node(++nodeCounter, heuristicValue[adjVertice.first][adjVertice.second], adjVertice, &(vertexList.at(parentCounter)));
-                vertexList.push_back(node);
-                addToPriorityQueue(frontier, node);
 
+                float accumulatedWeight = actualNode.getAccumulatedWeight() + this->map[adjVertice.first][adjVertice.second];
+                Node node(heuristicValue[adjVertice.first][adjVertice.second], adjVertice, actualNode.getPreviousPoints(), accumulatedWeight);
+
+                addToPriorityQueue(frontier, node);
                 actualNodeFrontier.push_back(node);
             }
 
@@ -145,10 +140,11 @@ void Greedy::getGreedy(vector<string> initialPosition, int numLines, int numColu
             {
                 float aux = this->map[adjVertice.first][adjVertice.second] + result;
                 weights[adjVertice.first][adjVertice.second] = aux;
-                Node node(++nodeCounter, heuristicValue[adjVertice.first][adjVertice.second], adjVertice, &(vertexList.at(parentCounter)));
-                vertexList.push_back(node);
-                addToPriorityQueue(frontier, node);
 
+                float accumulatedWeight = actualNode.getAccumulatedWeight() + this->map[adjVertice.first][adjVertice.second];
+                Node node(heuristicValue[adjVertice.first][adjVertice.second], adjVertice, actualNode.getPreviousPoints(), accumulatedWeight);
+
+                addToPriorityQueue(frontier, node);
                 actualNodeFrontier.push_back(node);
             }
         }
@@ -159,10 +155,11 @@ void Greedy::getGreedy(vector<string> initialPosition, int numLines, int numColu
             {
                 float aux = this->map[adjVertice.first][adjVertice.second] + result;
                 weights[adjVertice.first][adjVertice.second] = aux;
-                Node node(++nodeCounter, heuristicValue[adjVertice.first][adjVertice.second], adjVertice, &(vertexList.at(parentCounter)));
-                vertexList.push_back(node);
-                addToPriorityQueue(frontier, node);
 
+                float accumulatedWeight = actualNode.getAccumulatedWeight() + this->map[adjVertice.first][adjVertice.second];
+                Node node(heuristicValue[adjVertice.first][adjVertice.second], adjVertice, actualNode.getPreviousPoints(), accumulatedWeight);
+
+                addToPriorityQueue(frontier, node);
                 actualNodeFrontier.push_back(node);
             }
         }
@@ -173,10 +170,11 @@ void Greedy::getGreedy(vector<string> initialPosition, int numLines, int numColu
             {
                 float aux = this->map[adjVertice.first][adjVertice.second] + result;
                 weights[adjVertice.first][adjVertice.second] = aux;
-                Node node(++nodeCounter, heuristicValue[adjVertice.first][adjVertice.second], adjVertice, &(vertexList.at(parentCounter)));
-                vertexList.push_back(node);
-                addToPriorityQueue(frontier, node);
 
+                float accumulatedWeight = actualNode.getAccumulatedWeight() + this->map[adjVertice.first][adjVertice.second];
+                Node node(heuristicValue[adjVertice.first][adjVertice.second], adjVertice, actualNode.getPreviousPoints(), accumulatedWeight);
+
+                addToPriorityQueue(frontier, node);
                 actualNodeFrontier.push_back(node);
             }
         }
@@ -188,10 +186,11 @@ void Greedy::getGreedy(vector<string> initialPosition, int numLines, int numColu
             {
                 float aux = this->map[adjVertice.first][adjVertice.second] + result;
                 weights[adjVertice.first][adjVertice.second] = aux;
-                Node node(++nodeCounter, heuristicValue[adjVertice.first][adjVertice.second], adjVertice, &(vertexList.at(parentCounter)));
-                vertexList.push_back(node);
-                addToPriorityQueue(frontier, node);
 
+                float accumulatedWeight = actualNode.getAccumulatedWeight() + this->map[adjVertice.first][adjVertice.second];
+                Node node(heuristicValue[adjVertice.first][adjVertice.second], adjVertice, actualNode.getPreviousPoints(), accumulatedWeight);
+
+                addToPriorityQueue(frontier, node);
                 actualNodeFrontier.push_back(node);
             }
 
@@ -200,10 +199,11 @@ void Greedy::getGreedy(vector<string> initialPosition, int numLines, int numColu
             {
                 float aux = this->map[adjVertice.first][adjVertice.second] + result;
                 weights[adjVertice.first][adjVertice.second] = aux;
-                Node node(++nodeCounter, heuristicValue[adjVertice.first][adjVertice.second], adjVertice, &(vertexList.at(parentCounter)));
-                vertexList.push_back(node);
-                addToPriorityQueue(frontier, node);
 
+                float accumulatedWeight = actualNode.getAccumulatedWeight() + this->map[adjVertice.first][adjVertice.second];
+                Node node(heuristicValue[adjVertice.first][adjVertice.second], adjVertice, actualNode.getPreviousPoints(), accumulatedWeight);
+
+                addToPriorityQueue(frontier, node);
                 actualNodeFrontier.push_back(node);
             }
         }
@@ -214,10 +214,11 @@ void Greedy::getGreedy(vector<string> initialPosition, int numLines, int numColu
             {
                 float aux = this->map[adjVertice.first][adjVertice.second] + result;
                 weights[adjVertice.first][adjVertice.second] = aux;
-                Node node(++nodeCounter, heuristicValue[adjVertice.first][adjVertice.second], adjVertice, &(vertexList.at(parentCounter)));
-                vertexList.push_back(node);
-                addToPriorityQueue(frontier, node);
 
+                float accumulatedWeight = actualNode.getAccumulatedWeight() + this->map[adjVertice.first][adjVertice.second];
+                Node node(heuristicValue[adjVertice.first][adjVertice.second], adjVertice, actualNode.getPreviousPoints(), accumulatedWeight);
+
+                addToPriorityQueue(frontier, node);
                 actualNodeFrontier.push_back(node);
             }
         }
@@ -228,10 +229,11 @@ void Greedy::getGreedy(vector<string> initialPosition, int numLines, int numColu
             {
                 float aux = this->map[adjVertice.first][adjVertice.second] + result;
                 weights[adjVertice.first][adjVertice.second] = aux;
-                Node node(++nodeCounter, heuristicValue[adjVertice.first][adjVertice.second], adjVertice, &(vertexList.at(parentCounter)));
-                vertexList.push_back(node);
-                addToPriorityQueue(frontier, node);
 
+                float accumulatedWeight = actualNode.getAccumulatedWeight() + this->map[adjVertice.first][adjVertice.second];
+                Node node(heuristicValue[adjVertice.first][adjVertice.second], adjVertice, actualNode.getPreviousPoints(), accumulatedWeight);
+
+                addToPriorityQueue(frontier, node);
                 actualNodeFrontier.push_back(node);
             }
         }
@@ -245,10 +247,7 @@ void Greedy::getGreedy(vector<string> initialPosition, int numLines, int numColu
         if (actualNodeFrontier.empty())
         {
             actualNode = frontier.front();
-            parentCounter = actualNode.getVertex();
             frontier.pop_front();
-            // TODO Verify if this weight is INF
-            // TODO remove the node that leads to a dead end from frontier
             result = weights[actualNode.getPoints().first][actualNode.getPoints().second];
             continue;
         }
@@ -262,37 +261,14 @@ void Greedy::getGreedy(vector<string> initialPosition, int numLines, int numColu
                 actualNode = actualNodeFrontier.at(i);
             }
         }
-        parentCounter = actualNode.getVertex();
         result += this->map[actualNode.getPoints().first][actualNode.getPoints().second];
     }
 
-    // Node *aux;
-    // for (int i = vertexList.size() - 1; i >= 0; i--)
-    // {
-    //     if (vertexList.at(i).getPoints().first == finalPoints.first && vertexList.at(i).getPoints().second == finalPoints.second)
-    //     {
-    //         aux = &vertexList.at(i);
-    //         break;
-    //     }
-    // }
-
-    // vector<pair<int, int>> responsePoints;
-    // float responseWeight = 0.0;
-    // while (aux != nullptr)
-    // {
-    //     responsePoints.push_back(aux->getPoints());
-    //     responseWeight += aux->getWeight();
-    //     aux = aux->getPreviousNode();
-    // }
-    // responseWeight -= this->map[initialPoints.first][initialPoints.second];
-
-    // cout << responseWeight << " ";
-
-    // for (int i = responsePoints.size() - 1; i >= 0; i--)
-    // {
-    //     cout << "(" << responsePoints.at(i).first << "," << responsePoints.at(i).second << ") ";
-    // }
-    // cout << endl;
-
-    cout << "Result:" << result << endl;
+    cout << actualNode.getAccumulatedWeight() << " ";
+    for (int i = 1; i < actualNode.getPreviousPoints().size(); i++)
+    {
+        pair<int, int> aux = actualNode.getPreviousPoints().at(i);
+        cout << "(" << aux.first << "," << aux.second << ") ";
+    }
+    cout << endl;
 }
