@@ -30,13 +30,6 @@ Sintaxe:
 Exemplo: 
 ``` ./main ../maps/mapa_teste.map UCS 1 2 2 3 ```
 
-## Saída
-A saída do programa é dada da seguinte forma:
-
-``` <PATH_WEIGHT> <NODES_START_TO_GOAL>```
-
-Exemplo: ``` 2 (1,2) (1,3) (2,3) ```
-
 ### CMD Windows
 Compilar: ``` g++ -o main.exe main.cpp InputFile.cpp BFS.cpp IDS.cpp UCS.cpp Greedy.cpp AStar.cpp Node.cpp ```
 
@@ -65,3 +58,10 @@ Pode-se usar comandos do Makefile a partir da root do projeto para compilar e ex
         - *ucsCityx*
         - *greedyCityx*
         - *astarCityx*
+
+## Saída
+A saída do programa é dada da seguinte forma:
+
+``` <PATH_WEIGHT> <NODES_START_TO_GOAL>```
+
+Exemplo: ``` 2 (1,2) (1,3) (2,3) ```
