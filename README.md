@@ -4,6 +4,16 @@
 ## Sobre
 Este projeto explora 5 maneiras diferentes de buscar por um vértice específico em um grafo. BFS, IDS, UCS, Greedy e AStar.
 
+Este projeto usa imports da biblioteca padrão do C++:
+- cmath
+- fstream
+- iostream
+- list
+- queue
+- stack
+- string
+- vector
+
 ## Como Executar
 ### Terminal Linux
 Para executar um programa em C++, precisamos primeiro compilar seu código fonte.
