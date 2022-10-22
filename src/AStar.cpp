@@ -27,14 +27,14 @@ vector<vector<double>> AStar::calculateEuclideanDistance(const pair<int, int> fi
     return distances;
 }
 
-void AStar::addToPriorityQueue(list<Node> &frontier, Node vertex)
+void AStar::addToPriorityQueue(list<Node> &frontier, vector<vector<float>> weights, Node vertex)
 {
     bool isPushBack = true;
     if (!frontier.empty())
     {
         for (list<Node>::iterator it = frontier.begin(); it != frontier.end(); ++it)
         {
-            if (vertex.getWeight() <= it->getWeight())
+            if (weights[vertex.getPoints().first][vertex.getPoints().second] <= weights[it->getPoints().first][it->getPoints().second])
             {
                 frontier.insert(it, vertex);
                 isPushBack = false;
@@ -79,9 +79,7 @@ void AStar::getAStar(vector<string> initialPosition, int numLines, int numColumn
         }
         weights.push_back(aux);
     }
-
-    const vector<vector<double>> heuristicValue = this->calculateEuclideanDistance(finalPoints, numLines, numColumns);
-    double result = 0;
+    weights[initialPoints.first][initialPoints.second] = 0;
 
     vector<pair<int, int>> headPoints;
     headPoints.push_back({-1, -1});
@@ -90,46 +88,53 @@ void AStar::getAStar(vector<string> initialPosition, int numLines, int numColumn
     list<Node> frontier;
     pair<int, int> adjVertice;
 
+    const vector<vector<double>> heuristicValue = this->calculateEuclideanDistance(finalPoints, numLines, numColumns);
+
     while (true)
     {
-        vector<pair<int, int>> previousPoints = actualNode.getPreviousPoints();
-        previousPoints.push_back(actualNode.getPoints());
-        actualNode.setPreviousPoints(previousPoints);
+        vector<pair<int, int>> previous = actualNode.getPreviousPoints();
+        previous.push_back(actualNode.getPoints());
+        actualNode.setPreviousPoints(previous);
 
         if (finalPoints.first == actualNode.getPoints().first && finalPoints.second == actualNode.getPoints().second)
         {
             break;
         }
 
-        vector<Node> actualNodeFrontier;
         isVisited[actualNode.getPoints().first][actualNode.getPoints().second] = true;
+
+        float acumulatedDistance = weights[actualNode.getPoints().first][actualNode.getPoints().second];
 
         if ((actualNode.getPoints().first > 0) && (actualNode.getPoints().first < numLines - 1))
         {
             adjVertice = {actualNode.getPoints().first - 1, actualNode.getPoints().second};
             if (!isVisited[adjVertice.first][adjVertice.second])
             {
-                float aux = this->map[adjVertice.first][adjVertice.second] + result;
-                weights[adjVertice.first][adjVertice.second] = aux;
+                float aux = this->map[adjVertice.first][adjVertice.second] + heuristicValue[adjVertice.first][adjVertice.second] + acumulatedDistance;
+                if (weights[adjVertice.first][adjVertice.second] > aux)
+                {
+                    weights[adjVertice.first][adjVertice.second] = aux;
 
-                float accumulatedWeight = actualNode.getAccumulatedWeight() + this->map[adjVertice.first][adjVertice.second];
-                Node node(heuristicValue[adjVertice.first][adjVertice.second], adjVertice, actualNode.getPreviousPoints(), accumulatedWeight);
+                    float accumulatedWeight = actualNode.getAccumulatedWeight() + this->map[adjVertice.first][adjVertice.second];
+                    Node node(this->map[adjVertice.first][adjVertice.second], adjVertice, actualNode.getPreviousPoints(), accumulatedWeight);
 
-                addToPriorityQueue(frontier, node);
-                actualNodeFrontier.push_back(node);
+                    addToPriorityQueue(frontier, weights, node);
+                }
             }
 
             adjVertice = {actualNode.getPoints().first + 1, actualNode.getPoints().second};
             if (!isVisited[adjVertice.first][adjVertice.second])
             {
-                float aux = this->map[adjVertice.first][adjVertice.second] + result;
-                weights[adjVertice.first][adjVertice.second] = aux;
+                float aux = this->map[adjVertice.first][adjVertice.second] + heuristicValue[adjVertice.first][adjVertice.second] + acumulatedDistance;
+                if (weights[adjVertice.first][adjVertice.second] > aux)
+                {
+                    weights[adjVertice.first][adjVertice.second] = aux;
 
-                float accumulatedWeight = actualNode.getAccumulatedWeight() + this->map[adjVertice.first][adjVertice.second];
-                Node node(heuristicValue[adjVertice.first][adjVertice.second], adjVertice, actualNode.getPreviousPoints(), accumulatedWeight);
+                    float accumulatedWeight = actualNode.getAccumulatedWeight() + this->map[adjVertice.first][adjVertice.second];
+                    Node node(this->map[adjVertice.first][adjVertice.second], adjVertice, actualNode.getPreviousPoints(), accumulatedWeight);
 
-                addToPriorityQueue(frontier, node);
-                actualNodeFrontier.push_back(node);
+                    addToPriorityQueue(frontier, weights, node);
+                }
             }
         }
         if (actualNode.getPoints().first == 0)
@@ -137,14 +142,16 @@ void AStar::getAStar(vector<string> initialPosition, int numLines, int numColumn
             adjVertice = {actualNode.getPoints().first + 1, actualNode.getPoints().second};
             if (!isVisited[adjVertice.first][adjVertice.second])
             {
-                float aux = this->map[adjVertice.first][adjVertice.second] + result;
-                weights[adjVertice.first][adjVertice.second] = aux;
+                float aux = this->map[adjVertice.first][adjVertice.second] + heuristicValue[adjVertice.first][adjVertice.second] + acumulatedDistance;
+                if (weights[adjVertice.first][adjVertice.second] > aux)
+                {
+                    weights[adjVertice.first][adjVertice.second] = aux;
 
-                float accumulatedWeight = actualNode.getAccumulatedWeight() + this->map[adjVertice.first][adjVertice.second];
-                Node node(heuristicValue[adjVertice.first][adjVertice.second], adjVertice, actualNode.getPreviousPoints(), accumulatedWeight);
+                    float accumulatedWeight = actualNode.getAccumulatedWeight() + this->map[adjVertice.first][adjVertice.second];
+                    Node node(this->map[adjVertice.first][adjVertice.second], adjVertice, actualNode.getPreviousPoints(), accumulatedWeight);
 
-                addToPriorityQueue(frontier, node);
-                actualNodeFrontier.push_back(node);
+                    addToPriorityQueue(frontier, weights, node);
+                }
             }
         }
         if (actualNode.getPoints().first == numLines - 1)
@@ -152,14 +159,16 @@ void AStar::getAStar(vector<string> initialPosition, int numLines, int numColumn
             adjVertice = {actualNode.getPoints().first - 1, actualNode.getPoints().second};
             if (!isVisited[adjVertice.first][adjVertice.second])
             {
-                float aux = this->map[adjVertice.first][adjVertice.second] + result;
-                weights[adjVertice.first][adjVertice.second] = aux;
+                float aux = this->map[adjVertice.first][adjVertice.second] + heuristicValue[adjVertice.first][adjVertice.second] + acumulatedDistance;
+                if (weights[adjVertice.first][adjVertice.second] > aux)
+                {
+                    weights[adjVertice.first][adjVertice.second] = aux;
 
-                float accumulatedWeight = actualNode.getAccumulatedWeight() + this->map[adjVertice.first][adjVertice.second];
-                Node node(heuristicValue[adjVertice.first][adjVertice.second], adjVertice, actualNode.getPreviousPoints(), accumulatedWeight);
+                    float accumulatedWeight = actualNode.getAccumulatedWeight() + this->map[adjVertice.first][adjVertice.second];
+                    Node node(this->map[adjVertice.first][adjVertice.second], adjVertice, actualNode.getPreviousPoints(), accumulatedWeight);
 
-                addToPriorityQueue(frontier, node);
-                actualNodeFrontier.push_back(node);
+                    addToPriorityQueue(frontier, weights, node);
+                }
             }
         }
 
@@ -168,27 +177,31 @@ void AStar::getAStar(vector<string> initialPosition, int numLines, int numColumn
             adjVertice = {actualNode.getPoints().first, actualNode.getPoints().second - 1};
             if (!isVisited[adjVertice.first][adjVertice.second])
             {
-                float aux = this->map[adjVertice.first][adjVertice.second] + result;
-                weights[adjVertice.first][adjVertice.second] = aux;
+                float aux = this->map[adjVertice.first][adjVertice.second] + heuristicValue[adjVertice.first][adjVertice.second] + acumulatedDistance;
+                if (weights[adjVertice.first][adjVertice.second] > aux)
+                {
+                    weights[adjVertice.first][adjVertice.second] = aux;
 
-                float accumulatedWeight = actualNode.getAccumulatedWeight() + this->map[adjVertice.first][adjVertice.second];
-                Node node(heuristicValue[adjVertice.first][adjVertice.second], adjVertice, actualNode.getPreviousPoints(), accumulatedWeight);
+                    float accumulatedWeight = actualNode.getAccumulatedWeight() + this->map[adjVertice.first][adjVertice.second];
+                    Node node(this->map[adjVertice.first][adjVertice.second], adjVertice, actualNode.getPreviousPoints(), accumulatedWeight);
 
-                addToPriorityQueue(frontier, node);
-                actualNodeFrontier.push_back(node);
+                    addToPriorityQueue(frontier, weights, node);
+                }
             }
 
             adjVertice = {actualNode.getPoints().first, actualNode.getPoints().second + 1};
             if (!isVisited[adjVertice.first][adjVertice.second])
             {
-                float aux = this->map[adjVertice.first][adjVertice.second] + result;
-                weights[adjVertice.first][adjVertice.second] = aux;
+                float aux = this->map[adjVertice.first][adjVertice.second] + heuristicValue[adjVertice.first][adjVertice.second] + acumulatedDistance;
+                if (weights[adjVertice.first][adjVertice.second] > aux)
+                {
+                    weights[adjVertice.first][adjVertice.second] = aux;
 
-                float accumulatedWeight = actualNode.getAccumulatedWeight() + this->map[adjVertice.first][adjVertice.second];
-                Node node(heuristicValue[adjVertice.first][adjVertice.second], adjVertice, actualNode.getPreviousPoints(), accumulatedWeight);
+                    float accumulatedWeight = actualNode.getAccumulatedWeight() + this->map[adjVertice.first][adjVertice.second];
+                    Node node(this->map[adjVertice.first][adjVertice.second], adjVertice, actualNode.getPreviousPoints(), accumulatedWeight);
 
-                addToPriorityQueue(frontier, node);
-                actualNodeFrontier.push_back(node);
+                    addToPriorityQueue(frontier, weights, node);
+                }
             }
         }
         if (actualNode.getPoints().second == 0)
@@ -196,14 +209,16 @@ void AStar::getAStar(vector<string> initialPosition, int numLines, int numColumn
             adjVertice = {actualNode.getPoints().first, actualNode.getPoints().second + 1};
             if (!isVisited[adjVertice.first][adjVertice.second])
             {
-                float aux = this->map[adjVertice.first][adjVertice.second] + result;
-                weights[adjVertice.first][adjVertice.second] = aux;
+                float aux = this->map[adjVertice.first][adjVertice.second] + heuristicValue[adjVertice.first][adjVertice.second] + acumulatedDistance;
+                if (weights[adjVertice.first][adjVertice.second] > aux)
+                {
+                    weights[adjVertice.first][adjVertice.second] = aux;
 
-                float accumulatedWeight = actualNode.getAccumulatedWeight() + this->map[adjVertice.first][adjVertice.second];
-                Node node(heuristicValue[adjVertice.first][adjVertice.second], adjVertice, actualNode.getPreviousPoints(), accumulatedWeight);
+                    float accumulatedWeight = actualNode.getAccumulatedWeight() + this->map[adjVertice.first][adjVertice.second];
+                    Node node(this->map[adjVertice.first][adjVertice.second], adjVertice, actualNode.getPreviousPoints(), accumulatedWeight);
 
-                addToPriorityQueue(frontier, node);
-                actualNodeFrontier.push_back(node);
+                    addToPriorityQueue(frontier, weights, node);
+                }
             }
         }
         if (actualNode.getPoints().second == numColumns - 1)
@@ -211,41 +226,27 @@ void AStar::getAStar(vector<string> initialPosition, int numLines, int numColumn
             adjVertice = {actualNode.getPoints().first, actualNode.getPoints().second - 1};
             if (!isVisited[adjVertice.first][adjVertice.second])
             {
-                float aux = this->map[adjVertice.first][adjVertice.second] + result;
-                weights[adjVertice.first][adjVertice.second] = aux;
+                float aux = this->map[adjVertice.first][adjVertice.second] + heuristicValue[adjVertice.first][adjVertice.second] + acumulatedDistance;
+                if (weights[adjVertice.first][adjVertice.second] > aux)
+                {
+                    weights[adjVertice.first][adjVertice.second] = aux;
 
-                float accumulatedWeight = actualNode.getAccumulatedWeight() + this->map[adjVertice.first][adjVertice.second];
-                Node node(heuristicValue[adjVertice.first][adjVertice.second], adjVertice, actualNode.getPreviousPoints(), accumulatedWeight);
+                    float accumulatedWeight = actualNode.getAccumulatedWeight() + this->map[adjVertice.first][adjVertice.second];
+                    Node node(this->map[adjVertice.first][adjVertice.second], adjVertice, actualNode.getPreviousPoints(), accumulatedWeight);
 
-                addToPriorityQueue(frontier, node);
-                actualNodeFrontier.push_back(node);
+                    addToPriorityQueue(frontier, weights, node);
+                }
             }
         }
 
-        if (actualNodeFrontier.empty() && frontier.empty())
+        if (frontier.empty())
         {
             cout << "Cannot leave the vertice" << endl;
             exit(0);
         }
 
-        if (actualNodeFrontier.empty())
-        {
-            actualNode = frontier.front();
-            frontier.pop_front();
-            result = weights[actualNode.getPoints().first][actualNode.getPoints().second];
-            continue;
-        }
-
-        actualNode = actualNodeFrontier.front();
-        for (int i = 0; i < actualNodeFrontier.size(); i++)
-        {
-            if (heuristicValue[actualNode.getPoints().first][actualNode.getPoints().second] >
-                heuristicValue[actualNodeFrontier.at(i).getPoints().first][actualNodeFrontier.at(i).getPoints().second])
-            {
-                actualNode = actualNodeFrontier.at(i);
-            }
-        }
-        result += this->map[actualNode.getPoints().first][actualNode.getPoints().second];
+        actualNode = frontier.front();
+        frontier.pop_front();
     }
 
     cout << actualNode.getAccumulatedWeight() << " ";

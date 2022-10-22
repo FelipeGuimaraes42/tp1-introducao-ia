@@ -9,7 +9,7 @@ class AStar
 private:
     vector<vector<float>> map;
     vector<vector<double>> calculateEuclideanDistance(pair<int, int> finalPosition, int numLines, int numColumns);
-    void addToPriorityQueue(list<Node> &list, Node vertex);
+    void addToPriorityQueue(list<Node> &frontier, vector<vector<float>> weights, Node vertex);
 
 public:
     AStar(const vector<vector<float>> map);
