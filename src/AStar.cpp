@@ -18,7 +18,6 @@ vector<vector<double>> AStar::calculateEuclideanDistance(const pair<int, int> fi
             double xd = finalPosition.first - x;
             double yd = finalPosition.second - y;
             double distance = sqrt(xd * xd + yd * yd);
-            distance += this->map[x][y];
             aux.push_back(distance);
         }
         distances.push_back(aux);
